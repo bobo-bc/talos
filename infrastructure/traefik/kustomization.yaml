@@ -12,6 +12,7 @@ helmCharts:
     version: 34.0.0 # Check for latest version
     valuesInline:
       # This tells Traefik to listen for the "Ingress" resources we'll make later
+      installCRDs: true  # <--- Add this
       ingressClass:
         enabled: true
         isDefaultClass: true
