@@ -1,4 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 
-resources:
-  - deployment.yaml
-
+helmCharts:
+  - name: traefik
+    releaseName: traefik
+    namespace: traefik
+    repo: https://traefik.github.io/charts
+    version: 34.0.0 # Check for latest version
+    valuesInline:
+      # This tells Traefik to listen for the "Ingress" resources we'll make later
+      ingressClass:
+        enabled: true
+        isDefaultClass: true
+      # Standard Ports
+      ports:
+        web:
+          exposedPort: 80
+        websecure:
+          exposedPort: 443
