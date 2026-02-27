@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - dashboard-ingress.yaml # Add this line
+  - tls-store.yaml
   - https://raw.githubusercontent.com/traefik/traefik/v3.0/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
 
 helmCharts:
