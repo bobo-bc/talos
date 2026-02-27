@@ -3,6 +3,9 @@ kind: IngressRoute
 metadata:
   name: traefik-dashboard
   namespace: traefik
+  annotations:
+    # This tells ArgoCD to wait until 'Wave 0' (the Helm chart) is done
+    argoproj.io/sync-wave: "5"
 spec:
   entryPoints:
     - web
