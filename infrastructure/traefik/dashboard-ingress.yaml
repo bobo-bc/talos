@@ -8,10 +8,11 @@ metadata:
     argoproj.io/sync-wave: "5"
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
-    - match: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+    - match: Host(`traefik.smeyer.ca`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
       kind: Rule
       services:
         - name: api@internal
           kind: TraefikService
+  tls: {} # Empty brackets tell Traefik: "Use the default TLSStore certificate"
