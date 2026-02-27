@@ -9,12 +9,10 @@ spec:
     repoURL: https://github.com/bobo-bc/talos.git
     targetRevision: HEAD
     path: infrastructure/cert-manager
-    # --- THIS IS THE CRITICAL SECTION ---
     kustomize:
       pluginData:
         helm:
           enabled: true
-    # -------------------------------------
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
