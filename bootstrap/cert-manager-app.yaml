@@ -6,13 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/bobo-bc/talos.git # CHANGE TO YOUR REPO URL
+    repoURL: https://github.com/bobo-bc/homelab-talos.git
     targetRevision: HEAD
     path: infrastructure/cert-manager
+    # --- THIS IS THE CRITICAL SECTION ---
     kustomize:
       pluginData:
         helm:
           enabled: true
+    # -------------------------------------
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
