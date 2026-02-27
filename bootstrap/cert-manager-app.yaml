@@ -6,10 +6,6 @@ metadata:
 spec:
   project: default
   source:
-    kustomize:
-      pluginData:
-        helm:
-          enabled: true
     repoURL: https://github.com/bobo-bc/talos.git
     targetRevision: HEAD
     path: infrastructure/cert-manager
