@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://bjw-s.github.io/helm-charts/ 
+    chart: app-template
+    targetRevision: 3.1.0 # Current stable version of the popular k8s-at-home successor
+    helm:
+      values: |
+        controllers:
+          main:
+            containers:
+              main:
+                image:
+                  repository: linuxserver/sonarr
+                  tag: latest
+        persistence:
+          config:
+            enabled: true
+            storageClass: "longhorn"
+            size: 2Gi
+          media:
+            enabled: true
+            existingClaim: nfs-media-pvc
+            globalMounts:
+              - path: /tv
+        ingress:
+          main:
+            enabled: true
+            className: traefik
+            hosts:
+              - host: tv.smeyer.ca
+                paths:
+                  - path: /
+                    pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: media
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
