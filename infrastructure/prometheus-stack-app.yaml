@@ -14,15 +14,14 @@ spec:
       valuesInline:
         prometheus:
           prometheusSpec:
-            storageSpec: & storage
+            storageSpec: 
               volumeClaimTemplate:
                 spec:
                   storageClassName: "longhorn" # Added quotes
-                  accessModes: ["ReadWriteOnce"]            # Switched to block list
+                  accessModes: "ReadWriteOnce"            # Switched to block list
                   resources:
                     requests:
                       storage: "20Gi"          # Added quotes
-  storage: *storage
         grafana:
           adminPassword: "admin"
           ingress:
