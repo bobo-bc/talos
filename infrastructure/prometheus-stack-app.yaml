@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  annotations:
+    # Wave 3 ensures Traefik (Wave 2) is already there to provide the 
+    # Ingress and Certs for the Grafana dashboard.
+    argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bobo-bc/talos.git
+    targetRevision: HEAD
+    # Points to the folder containing your kustomization.yaml and values
+    path: infrastructure/kube-prometheus-stack
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # MANDATORY: The Prometheus CRDs are too large for standard apply
+      - ServerSideApply=true
