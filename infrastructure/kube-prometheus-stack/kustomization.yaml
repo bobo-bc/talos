@@ -3,6 +3,9 @@ kind: Kustomization
 
 namespace: monitoring
 
+resources:
+   - test-config.yaml
+
 helmCharts:
   - name: kube-prometheus-stack
     releaseName: kube-prometheus-stack
