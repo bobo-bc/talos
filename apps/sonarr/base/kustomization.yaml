@@ -1,0 +1,4 @@
+resources:
+  - nfs-resources.yaml
+  - storageclass.yaml
+  - sonarr-app.yaml
