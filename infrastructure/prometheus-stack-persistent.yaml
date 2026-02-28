@@ -21,6 +21,14 @@ spec:
                   resources:
                     requests:
                       storage: 20Gi
+      grafana: # <--- ADD THIS SECTION
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hosts:
+              - grafana.smeyer.ca
+            path: /
+            pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
