@@ -15,6 +15,14 @@ helmCharts:
     version: 34.0.0 # Check for latest version
     valuesInline:
       # This tells Traefik to listen for the "Ingress" resources we'll make later
+      metrics:
+        prometheus:
+          entryPoint: metrics
+      service:
+        metrics:
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "8082"
       deployment:
         kind: Deployment
       installCRDs: true  # <--- Add this
