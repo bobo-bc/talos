@@ -6,34 +6,32 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://k8s-at-home.com/charts/ # Or the modern 'bjw-s' charts
-    chart: sonarr
-    targetRevision: 16.2.0
+    repoURL: https://bjw-s.github.io/helm-charts/ 
+    chart: app-template
+    targetRevision: 3.1.0 # Current stable version of the popular k8s-at-home successor
     helm:
       values: |
-        image:
-          repository: linuxserver/sonarr
-          tag: latest
-        
-        # 1. THE "BRAIN" (Longhorn)
+        controllers:
+          main:
+            containers:
+              main:
+                image:
+                  repository: linuxserver/sonarr
+                  tag: latest
         persistence:
           config:
             enabled: true
             storageClass: "longhorn"
             size: 2Gi
-            accessMode: ReadWriteOnce
-
-# This tells Sonarr: "Don't make a volume, just use the one I created"
           media:
             enabled: true
-            existingClaim: nfs-media-pvc 
-            mountPath: /tv
-
-        # 3. THE "ACCESS" (Traefik)
+            existingClaim: nfs-media-pvc
+            globalMounts:
+              - path: /tv
         ingress:
           main:
             enabled: true
-            ingressClassName: traefik
+            className: traefik
             hosts:
               - host: tv.smeyer.ca
                 paths:
