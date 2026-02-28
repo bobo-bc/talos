@@ -17,11 +17,12 @@ spec:
             storageSpec:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: longhorn
-                  accessModes: ["ReadWriteOnce"]
+                  storageClassName: "longhorn" # Added quotes
+                  accessModes: 
+                    - ReadWriteOnce            # Switched to block list
                   resources:
                     requests:
-                      storage: 20Gi
+                      storage: "20Gi"          # Added quotes
         grafana:
           adminPassword: "admin"
           ingress:
