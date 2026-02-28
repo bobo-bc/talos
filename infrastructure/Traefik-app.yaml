@@ -3,11 +3,16 @@ kind: Application
 metadata:
   name: traefik
   namespace: argocd
+  annotations:
+    # Wave 2 ensures Cert-Manager (Wave 1) is already running 
+    # so the Wildcard Certificate can be issued immediately.
+    argoproj.io/sync-wave: "2"
 spec:
   project: default
   source:
-    repoURL: https://github.com/bobo-bc/talos.git # Change to your repo
+    repoURL: https://github.com/bobo-bc/talos.git
     targetRevision: HEAD
+    # This points to the subfolder where your kustomization.yaml lives
     path: infrastructure/traefik
   destination:
     server: https://kubernetes.default.svc
@@ -18,3 +23,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      # Recommended for Traefik v3 to handle large CRD updates
+      - ServerSideApply=true
