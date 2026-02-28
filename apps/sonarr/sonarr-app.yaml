@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.linuxserver.io
+    repoURL: https://charts.linuxserver.io/
     chart: sonarr
     targetRevision: 6.5.3  # This is the current stable version
     helm:
