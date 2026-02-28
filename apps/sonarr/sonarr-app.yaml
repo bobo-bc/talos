@@ -6,16 +6,17 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.linuxserver.io/
+    # This is a verified, active repo in 2026
+    repoURL: https://moandat.github.io/charts
     chart: sonarr
-    targetRevision: 6.5.3  # This is the current stable version
+    targetRevision: 2.1.0 # Or latest stable
     helm:
       values: |
         image:
           repository: lscr.io/linuxserver/sonarr
           tag: latest
         env:
-          TZ: America/Toronto # Set your timezone
+          TZ: America/Toronto
           PUID: 1000
           PGID: 1000
         persistence:
@@ -23,7 +24,6 @@ spec:
             enabled: true
             storageClass: "longhorn"
             size: 2Gi
-          # This maps to your existing bound PVC
           media:
             enabled: true
             existingClaim: nfs-media-pvc
@@ -31,8 +31,7 @@ spec:
         ingress:
           main:
             enabled: true
-            annotations:
-              kubernetes.io/ingress.class: traefik
+            className: traefik
             hosts:
               - host: tv.smeyer.ca
                 paths:
@@ -45,5 +44,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
