@@ -6,32 +6,33 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://bjw-s.github.io/helm-charts 
-    chart: app-template
-    targetRevision: 3.1.0 # Current stable version of the popular k8s-at-home successor
+    repoURL: https://charts.linuxserver.io
+    chart: sonarr
+    targetRevision: 6.5.3  # This is the current stable version
     helm:
       values: |
-        controllers:
-          main:
-            containers:
-              main:
-                image:
-                  repository: linuxserver/sonarr
-                  tag: latest
+        image:
+          repository: lscr.io/linuxserver/sonarr
+          tag: latest
+        env:
+          TZ: America/Toronto # Set your timezone
+          PUID: 1000
+          PGID: 1000
         persistence:
           config:
             enabled: true
             storageClass: "longhorn"
             size: 2Gi
+          # This maps to your existing bound PVC
           media:
             enabled: true
             existingClaim: nfs-media-pvc
-            globalMounts:
-              - path: /tv
+            mountPath: /tv
         ingress:
           main:
             enabled: true
-            className: traefik
+            annotations:
+              kubernetes.io/ingress.class: traefik
             hosts:
               - host: tv.smeyer.ca
                 paths:
