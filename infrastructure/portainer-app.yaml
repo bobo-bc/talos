@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portainer
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://portainer.github.io/k8s/
+    chart: portainer
+    targetRevision: 1.0.61  # Check for latest, but this is a stable one
+    helm:
+      values: |
+        service:
+          type: ClusterIP
+        persistence:
+          enabled: true
+          storageClass: "longhorn"
+          size: "2Gi"
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          hosts:
+            - host: portainer.smeyer.ca
+              paths:
+                - path: /
+                  pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: portainer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
