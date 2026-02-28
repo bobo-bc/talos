@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debug-test
+  namespace: monitoring
+data:
+  hello: world
