@@ -6,37 +6,36 @@ metadata:
 spec:
   project: default
   source:
-    # This is a verified, active repo in 2026
-    repoURL: https://moandat.github.io/charts
+    # This is the modern 'heavyweight' repo that hasn't moved
+    repoURL: https://charts.truecharts.org
     chart: sonarr
-    targetRevision: 2.1.0 # Or latest stable
+    targetRevision: 15.0.12 # Current stable OCI-backed version
     helm:
       values: |
         image:
-          repository: lscr.io/linuxserver/sonarr
-          tag: latest
-        env:
-          TZ: America/Toronto
-          PUID: 1000
-          PGID: 1000
+          repository: tccr.io/truecharts/sonarr
+          tag: v4.0.1.929
+        # Storage Configuration
         persistence:
           config:
             enabled: true
+            type: pvc
             storageClass: "longhorn"
             size: 2Gi
           media:
             enabled: true
+            type: pvc
             existingClaim: nfs-media-pvc
             mountPath: /tv
+        # Networking
         ingress:
           main:
             enabled: true
-            className: traefik
+            integrations:
+              traefik:
+                enabled: true
             hosts:
               - host: tv.smeyer.ca
-                paths:
-                  - path: /
-                    pathType: Prefix
   destination:
     server: https://kubernetes.default.svc
     namespace: media
