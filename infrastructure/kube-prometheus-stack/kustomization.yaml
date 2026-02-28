@@ -3,9 +3,6 @@ kind: Kustomization
 
 namespace: monitoring
 
-resources:
- - test-config.yaml
-
 helmCharts:
   - name: kube-prometheus-stack
     releaseName: kube-prometheus-stack
@@ -28,10 +25,5 @@ helmCharts:
         ingress:
           enabled: true
           ingressClassName: traefik
-          annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
-            traefik.ingress.kubernetes.io/router.tls: "true"
           hosts:
             - grafana.smeyer.ca
-          path: /
-          pathType: ImplementationSpecific
