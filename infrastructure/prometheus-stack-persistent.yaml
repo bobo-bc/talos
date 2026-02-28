@@ -6,31 +6,21 @@ metadata:
 spec:
   project: default
   source:
-    # Use the direct Helm Repo instead of your git path
     repoURL: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
     targetRevision: 61.3.1
     helm:
-      valuesInline:
+      values: |
         prometheus:
           prometheusSpec:
-            storageSpec: 
+            storageSpec:
               volumeClaimTemplate:
                 spec:
-                  storageClassName: "longhorn" # Added quotes
-                  accessModes: "ReadWriteOnce"            # Switched to block list
+                  storageClassName: longhorn
+                  accessModes: ["ReadWriteOnce"]
                   resources:
                     requests:
-                      storage: "20Gi"          # Added quotes
-        grafana:
-          adminPassword: "admin"
-          ingress:
-            enabled: true
-            ingressClassName: traefik
-            hosts:
-              - grafana.smeyer.ca
-            path: /
-            pathType: Prefix
+                      storage: 20Gi
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -41,3 +31,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+
