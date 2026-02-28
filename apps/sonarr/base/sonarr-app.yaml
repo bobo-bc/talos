@@ -23,14 +23,10 @@ spec:
             size: 2Gi
             accessMode: ReadWriteOnce
 
-          # 2. THE "MEDIA" (NFS)
+# This tells Sonarr: "Don't make a volume, just use the one I created"
           media:
             enabled: true
-            type: custom
-            volumeSpec:
-              nfs:
-                server: 10.0.0.5  # Your NFS Server IP
-                path: /
+            existingClaim: nfs-media-pvc 
             mountPath: /tv
 
         # 3. THE "ACCESS" (Traefik)
