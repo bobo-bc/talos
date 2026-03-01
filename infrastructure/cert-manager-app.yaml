@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/bobo-bc/talos.git
     targetRevision: HEAD
-    path: infrastructure/cert-manager
+    path: manifests/cert-manager
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
