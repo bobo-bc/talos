@@ -12,7 +12,7 @@ spec:
     targetRevision: HEAD
     path: apps # The folder you want to watch
     directory:
-      recurse: false # This allows subfolders like apps/sonarr
+      recurse: true # This allows subfolders like apps/sonarr
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd # The Root app lives in argocd, but children can go elsewhere
