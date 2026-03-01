@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/bobo-bc/talos.git # Point to your own repo
     targetRevision: HEAD
-    path: apps/sonarr/manifests # Point to the folder where you'll put the YAML below
+    path: manifests/sonarr # Point to the folder where you'll put the YAML below
   destination:
     server: https://kubernetes.default.svc
     namespace: media
