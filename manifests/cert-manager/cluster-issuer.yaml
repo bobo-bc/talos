@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production # Use staging first so you don't get rate-limited!
+spec:
+  acme:
+    email: stevenfmeyer@me.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-production-account-key
+    solvers:
+    - dns01:
+        cloudflare:
+          email: stevenfmeyer@me.com
+          apiTokenSecretRef:
+            name: cloudflare-api-token-secret
+            key: api-token
