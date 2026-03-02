@@ -65,6 +65,7 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
+          subPath: downloads
 
       volumes:
       - name: config
