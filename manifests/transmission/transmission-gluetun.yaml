@@ -55,7 +55,7 @@ spec:
         - name: PGID
           value: "1000"
         - name: TZ
-          value: "America/VAncouver"
+          value: "America/Vancouver"
         - name: USER # Web UI Username
           value: "admin"
         - name: PASS # Web UI Password
