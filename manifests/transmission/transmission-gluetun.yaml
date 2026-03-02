@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission-vpn
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      containers:
+      # --- CONTAINER 1: GLUETUN (The VPN) ---
+      - name: vpn
+        image: qmcgaw/gluetun:latest
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"] # Required for VPN tunnel
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: "nordvpn"
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              name: vpn-auth
+              key: username
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vpn-auth
+              key: password
+        - name: SERVER_COUNTRIES
+          value: "Canada" # Or your preferred location
+        # Transmission's Web UI Port must be opened here in Gluetun
+        ports:
+        - containerPort: 9091
+          name: http-web
+        - containerPort: 51413
+          name: torrent-tcp
+        - containerPort: 51413
+          protocol: UDP
+          name: torrent-udp
+
+      # --- CONTAINER 2: TRANSMISSION ---
+      - name: transmission
+        image: lscr.io/linuxserver/transmission:latest
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/VAncouver"
+        - name: USER # Web UI Username
+          value: "admin"
+        - name: PASS # Web UI Password
+          value: "Hurts2p33"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: transmission-config-pvc
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: nfs-media-pvc # Points to your existing NFS mount
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+  namespace: media
+spec:
+  ports:
+  - port: 9091
+    targetPort: 9091
+  selector:
+    app: transmission
