@@ -20,6 +20,7 @@ spec:
         securityContext:
           capabilities:
             add: ["NET_ADMIN"] # Required for VPN tunnel
+         privileged: true
         env:
         - name: VPN_SERVICE_PROVIDER
           value: "nordvpn"
