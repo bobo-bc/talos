@@ -1,22 +1,46 @@
-apiVersion: traefik.io/v1alpha1
-kind: TraefikService
+---
+apiVersion: v1
+kind: Service
 metadata:
-  name: plex-external-service
+  name: external-plex
   namespace: media
 spec:
-  externalName: 10.0.2.10 # Your Plex IP
+  ports:
+    - name: web
+      protocol: TCP
+      port: 32400
+      targetPort: 32400
 ---
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-plex
+  namespace: media
+subsets:
+  - addresses:
+      - ip: 10.0.2.10 # <--- Your Plex IP
+    ports:
+      - name: web
+        port: 32400
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: plex-ingress
   namespace: media
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    # This is the "Magic" line for Traefik 404s on external IPs:
+    traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
 spec:
-  entryPoints:
-    - web
-  routes:
-  - match: Host(`plex.smeyer.ca`)
-    kind: Rule
-    services:
-    - name: plex-external-service
-      port: 32400
+  rules:
+  - host: plex.smeyer.ca
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: external-plex
+            port:
+              number: 32400
