@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: ghcr.io/dotvsh/booklore:latest
+        image: linuxserver/booklore:latest
         env:
         - name: BOOKLORE_PORT
           value: "8080"
