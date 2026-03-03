@@ -5,29 +5,14 @@ metadata:
   name: external-plex
   namespace: media
 spec:
+  # This tells Kubernetes to route traffic for this service to your external IP
+  externalIPs:
+    - 10.0.2.10 # <--- Your Plex IP
   ports:
     - name: web
       protocol: TCP
       port: 32400
       targetPort: 32400
----
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
-metadata:
-  name: external-plex-1 # Slices usually have a suffix
-  namespace: media
-  labels:
-    kubernetes.io/service-name: external-plex # This links it to the Service
-addressType: IPv4
-ports:
-  - name: web
-    protocol: TCP
-    port: 32400
-endpoints:
-  - addresses:
-      - "10.0.2.10" # <--- Your Plex IP
-    conditions:
-      ready: true
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
