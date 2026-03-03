@@ -98,6 +98,7 @@ spec:
       - name: nfs-storage
         persistentVolumeClaim:
           claimName: nfs-media-pvc
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -119,3 +120,16 @@ spec:
             name: booklore
             port:
               number: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booklore
+  namespace: media
+spec:
+  selector:
+    app: booklore
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
