@@ -1,36 +1,26 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: external-plex
-  namespace: media
-spec:
-  type: ExternalName
-  externalName: 10.0.2.10 # <--- Your Plex IP here
-  ports:
-    - name: web
-      port: 32400
-      protocol: TCP
-      targetPort: 32400
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: plex-ingress
   namespace: media
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    # This tells Traefik to allow routing to an ExternalName service
-    traefik.ingress.kubernetes.io/service.passhostheader: "true"
 spec:
-  rules:
-  - host: plex.smeyer.ca
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: external-plex
-            port:
-              number: 32400
+  entryPoints:
+    - web        # Port 80
+    - websecure  # Port 443
+  routes:
+  - match: Host(`plex.smeyer.ca`)
+    kind: Rule
+    services:
+    - name: plex-backend
+      port: 32400
+---
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
+metadata:
+  name: plex-backend
+  namespace: media
+spec:
+  # This is the "Magic" - it tells Traefik to go straight to the IP 
+  # and skip all Kubernetes endpoint/pod discovery.
+  externalName: 10.0.2.10
