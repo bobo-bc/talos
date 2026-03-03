@@ -24,6 +24,8 @@ spec:
             secretKeyRef:
               name: mariadb-creds
               key: root-password
+        - name: MARIADB_ROOT_HOST
+          value: "%"
         - name: MARIADB_DATABASE
           value: "booklore"
         ports:
