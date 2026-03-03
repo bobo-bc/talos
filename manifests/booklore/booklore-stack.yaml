@@ -73,9 +73,9 @@ spec:
       containers:
       - name: booklore
         image: booklore/booklore:latest
-        ports:
-        - containerPort: 8080
         env:
+        - name: BOOKLORE_PORT
+          value: "8080"
         - name: DB_TYPE
           value: "mysql"
         - name: DB_HOST
