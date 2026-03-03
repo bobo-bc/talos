@@ -28,6 +28,13 @@ spec:
           value: "%"
         - name: MARIADB_DATABASE
           value: "booklore"
+        - name: MARIADB_USER
+          value: "booklore_user"
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-creds
+              key: "booklore_pass"
         ports:
         - containerPort: 3306
           name: mysql
