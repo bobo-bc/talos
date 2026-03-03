@@ -1,0 +1,121 @@
+# --- MariaDB Database (StatefulSet) ---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+  namespace: media
+spec:
+  serviceName: "mariadb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:11.2
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-creds
+              key: root-password
+        - name: MARIADB_DATABASE
+          value: "booklore"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: 5Gi
+---
+# --- Internal Service for Database ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  namespace: media
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mariadb
+---
+# --- Booklore Application ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booklore
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booklore
+  template:
+    metadata:
+      labels:
+        app: booklore
+    spec:
+      containers:
+      - name: booklore
+        image: x0uid/booklore:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_TYPE
+          value: "mysql"
+        - name: DB_HOST
+          value: "mariadb" # Matches the Service name above
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "booklore"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-creds
+              key: root-password
+        volumeMounts:
+        - name: nfs-storage
+          mountPath: /data # Following our "Single Mount" rule
+      volumes:
+      - name: nfs-storage
+        persistentVolumeClaim:
+          claimName: nfs-media-pvc
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: booklore-ingress
+  namespace: media
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    # If you use cert-manager for SSL, add this line:
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: books.smeyer.ca
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: booklore
+            port:
+              number: 8080
