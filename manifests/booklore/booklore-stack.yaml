@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: x0uid/booklore:latest
+        image: dotvsh/booklore:latest
         ports:
         - containerPort: 8080
         env:
