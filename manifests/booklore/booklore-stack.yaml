@@ -34,7 +34,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
-              key: "booklore_pass"
+              key: booklore_pass
         ports:
         - containerPort: 3306
           name: mysql
@@ -81,33 +81,34 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: booklore/booklore:latest
+        image: ghcr.io/dotvsh/booklore:latest
         env:
         - name: BOOKLORE_PORT
           value: "8080"
         - name: DB_TYPE
           value: "mysql"
         - name: DB_HOST
-          value: "mariadb" # Matches the Service name above
+          value: "mariadb"
         - name: DB_PORT
           value: "3306"
         - name: DB_NAME
           value: "booklore"
         - name: DB_USER
-          value: ""booklore_user"
+          value: "booklore_user"
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
-              key: "booklore_pass"
+              key: booklore_pass
         volumeMounts:
         - name: nfs-storage
-          mountPath: /data # Following our "Single Mount" rule
+          mountPath: /data
       volumes:
       - name: nfs-storage
         persistentVolumeClaim:
-          claimName: nfs-media-pvc
+          claim_name: nfs-media-pvc
 ---
+# --- Networking ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -115,8 +116,6 @@ metadata:
   namespace: media
   annotations:
     kubernetes.io/ingress.class: traefik
-    # If you use cert-manager for SSL, add this line:
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
   - host: books.smeyer.ca
@@ -141,4 +140,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 8080
+      target_port: 8080
