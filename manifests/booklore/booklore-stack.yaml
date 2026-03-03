@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: linuxserver/booklore:latest
+        image: lscr.io/linuxserver/booklore:latest
         env:
         - name: BOOKLORE_PORT
           value: "8080"
@@ -101,10 +101,10 @@ spec:
               name: mariadb-creds
               key: booklore_pass
         volumeMounts:
-        - name: nfs-storage
+        - name: nfs-storage-volume
           mountPath: /data
       volumes:
-      - name: nfs-storage
+      - name: nfs-storage-volume
         persistentVolumeClaim:
           claim_name: nfs-media-pvc
 ---
