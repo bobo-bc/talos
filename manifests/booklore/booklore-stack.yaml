@@ -94,12 +94,12 @@ spec:
         - name: DB_NAME
           value: "booklore"
         - name: DB_USER
-          value: "root"
+          value: ""booklore_user"
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
-              key: root-password
+              key: "booklore_pass"
         volumeMounts:
         - name: nfs-storage
           mountPath: /data # Following our "Single Mount" rule
