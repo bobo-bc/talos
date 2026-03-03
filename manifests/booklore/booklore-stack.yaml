@@ -29,7 +29,7 @@ spec:
         - name: MARIADB_DATABASE
           value: "booklore"
         - name: MARIADB_USER
-          value: "booklore_user"
+          value: "booklore" # Matched to your Docker export
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -81,34 +81,51 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: lscr.io/linuxserver/booklore:latest
+        image: booklore/booklore:latest
         env:
         - name: BOOKLORE_PORT
-          value: "8080"
-        - name: DB_TYPE
-          value: "mysql"
-        - name: DB_HOST
-          value: "mariadb"
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: "booklore"
-        - name: DB_USER
-          value: "booklore_user"
-        - name: DB_PASSWORD
+          value: "6060"
+        - name: DATABASE_USERNAME
+          value: "booklore" # Matched to your Docker export
+        - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
               key: booklore_pass
+        # Critical JDBC string pointing to internal K8s Service
+        - name: DATABASE_URL
+          value: "jdbc:mariadb://mariadb:3306/booklore?useSSL=false&allowPublicKeyRetrieval=true"
+        - name: TZ
+          value: "Etc/UTC"
         volumeMounts:
-        - name: nfs-storage-volume
-          mountPath: /data
+        - name: nfs-storage
+          mountPath: /app/data
+          subPath: images/booklore/data
+        - name: nfs-storage
+          mountPath: /bookdrop
+          subPath: media/bookdrop
+        - name: nfs-storage
+          mountPath: /books
+          subPath: media/books
       volumes:
-      - name: nfs-storage-volume
+      - name: nfs-storage
         persistentVolumeClaim:
-          claim_name: nfs-media-pvc
+          claimName: nfs-media-pvc
 ---
-# --- Networking ---
+# --- Networking (Service & Ingress) ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booklore
+  namespace: media
+spec:
+  selector:
+    app: booklore
+  ports:
+    - protocol: TCP
+      port: 6060
+      targetPort: 6060
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -127,17 +144,4 @@ spec:
           service:
             name: booklore
             port:
-              number: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: booklore
-  namespace: media
-spec:
-  selector:
-    app: booklore
-  ports:
-    - protocol: TCP
-      port: 8080
-      target_port: 8080
+              number: 6060
