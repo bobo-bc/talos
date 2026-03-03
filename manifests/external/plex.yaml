@@ -1,35 +1,22 @@
----
-apiVersion: v1
-kind: Service
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
 metadata:
-  name: external-plex
+  name: plex-external-service
   namespace: media
 spec:
-  # This tells Kubernetes to route traffic for this service to your external IP
-  externalIPs:
-    - 10.0.2.10 # <--- Your Plex IP
-  ports:
-    - name: web
-      protocol: TCP
-      port: 32400
-      targetPort: 32400
+  externalName: 10.0.2.10 # Your Plex IP
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: plex-ingress
   namespace: media
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
-  rules:
-  - host: plex.smeyer.ca
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: external-plex
-            port:
-              number: 32400
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`plex.smeyer.ca`)
+    kind: Rule
+    services:
+    - name: plex-external-service
+      port: 32400
