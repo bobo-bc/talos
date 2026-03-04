@@ -53,7 +53,7 @@ spec:
             - name: ALLOWED_HOSTS
               value: "pdfding.smeyer.ca"
             - name: CSRF_TRUSTED_ORIGINS
-              value: "https://pdfding.smeyer.ca"
+              value: "https://pdf.smeyer.ca"
           volumeMounts:
             - name: db-storage
               mountPath: /app/db
