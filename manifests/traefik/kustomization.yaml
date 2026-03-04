@@ -6,26 +6,25 @@ resources:
   - tls-store.yaml
   - wildcard-cert.yaml
 
-# This creates the "external-services.yaml" file inside a ConfigMap
 configMapGenerator:
   - name: traefik-external-config
     namespace: traefik
     literals:
       - external-services.yaml=|
-        http:
-          routers:
-            plex-router:
-              rule: "Host(`plex.smeyer.ca`)"
-              entryPoints:
-                - web
-                - websecure
-              service: plex-external
-              tls: {} # Uses your wildcard cert automatically
-          services:
-            plex-external:
-              loadBalancer:
-                servers:
-                  - url: "http://10.0.2.10:32400"
+          http:
+            routers:
+              plex-router:
+                rule: "Host(`plex.smeyer.ca`)"
+                entryPoints:
+                  - web
+                  - websecure
+                service: plex-external
+                tls: {}
+            services:
+              plex-external:
+                loadBalancer:
+                  servers:
+                    - url: "http://10.0.2.10:32400"
 
 helmCharts:
   - name: traefik
@@ -36,7 +35,6 @@ helmCharts:
     valuesInline:
       deployment:
         kind: Deployment
-        # --- ADDED: Volume Mounts ---
         additionalVolumes:
           - name: external-config
             configMap:
@@ -46,28 +44,9 @@ helmCharts:
             mountPath: /config
             readOnly: true
       
-      # --- ADDED: Static Config Arguments ---
       additionalArguments:
         - "--providers.file.directory=/config"
         - "--providers.file.watch=true"
 
       installCRDs: true
-      ingressClass:
-        enabled: true
-        isDefaultClass: true
-      metrics:
-        prometheus:
-          entryPoint: metrics
-      service:
-        metrics:
-          annotations:
-            prometheus.io/scrape: "true"
-            prometheus.io/port: "8082"
-      ports:
-        web:
-          exposedPort: 80
-        websecure:
-          exposedPort: 443
-        metrics:
-          port: 8082
-          exposedPort: 8082
+      # ... (keep the rest of your metrics and ports as they were)
