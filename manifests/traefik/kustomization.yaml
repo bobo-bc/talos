@@ -19,17 +19,34 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 34.0.0 
     valuesInline:
-      # Keep your existing metrics/ports here, but we'll 
-      # handle the volumes via the patch below for reliability.
       installCRDs: true
-      ingressClass:
-        enabled: true
-        isDefaultClass: true
+      # This is the "Static Config" argument for the File Provider
       additionalArguments:
         - "--providers.file.directory=/config"
         - "--providers.file.watch=true"
+      
+      # --- KEEP ALL YOUR EXISTING CONFIG BELOW ---
+      ingressClass:
+        enabled: true
+        isDefaultClass: true
+      metrics:
+        prometheus:
+          entryPoint: metrics
+      service:
+        metrics:
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "8082"
+      ports:
+        web:
+          exposedPort: 80
+        websecure:
+          exposedPort: 443
+        metrics:
+          port: 8082
+          exposedPort: 8082
 
-# --- THE FIX: MANUAL INJECTION ---
+# --- THE PATCH (Add this at the very bottom) ---
 patches:
   - target:
       kind: Deployment
@@ -53,23 +70,3 @@ patches:
               - name: external-config
                 configMap:
                   name: traefik-external-config
-      ingressClass:
-        enabled: true
-        isDefaultClass: true
-      # ... rest of your config
-      metrics:
-        prometheus:
-          entryPoint: metrics
-      service:
-        metrics:
-          annotations:
-            prometheus.io/scrape: "true"
-            prometheus.io/port: "8082"
-      ports:
-        web:
-          exposedPort: 80
-        websecure:
-          exposedPort: 443
-        metrics:
-          port: 8082
-          exposedPort: 8082
