@@ -78,19 +78,3 @@ spec:
       targetPort: 80
   selector:
     app: pdfding
-
-
-
-containers:
-        - name: pdfding
-          image: mrmn2/pdfding:latest
-          env:
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: pdfding-secrets  # The name you used in 'kubectl create secret'
-                  key: SECRET_KEY        # The key inside that secret
-            - name: ALLOWED_HOSTS
-              value: "pdfding.smeyer.ca"
-            - name: CSRF_TRUSTED_ORIGINS
-              value: "https://pdfding.smeyer.ca"
