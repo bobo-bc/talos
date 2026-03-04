@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pdfding-https
+  namespace: pdfding
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`pdfding.smeyer.ca`)
+      kind: Rule
+      services:
+        - name: pdfding
+          port: 80
+  tls:
+    secretName: wildcard-smeyer-ca-tls
