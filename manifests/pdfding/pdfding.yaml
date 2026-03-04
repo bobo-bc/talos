@@ -9,7 +9,6 @@ spec:
     # Use the official URL from their docs
     repoURL: 'https://charts.pdfding.com'
     chart: pdfding
-    targetRevision: latest
     helm:
       values: |
         config:
