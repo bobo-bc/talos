@@ -9,7 +9,7 @@ spec:
     # Use the official URL from their docs
     repoURL: 'https://mrmn2.github.io/pdfding'
     chart: pdfding
-    targetRevision: 0.1.x
+    targetRevision: 0.1.1
     helm:
       values: |
         config:
