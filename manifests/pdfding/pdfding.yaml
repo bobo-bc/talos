@@ -51,7 +51,7 @@ spec:
                   name: pdfding-secrets # Kustomize handles the hash suffix for you!
                   key: SECRET_KEY
             - name: ALLOWED_HOSTS
-              value: "pdf.smeyer.ca"
+              value: "pdf.smeyer.ca,localhost,127.0.0.1"
             - name: CSRF_TRUSTED_ORIGINS
               value: "https://pdf.smeyer.ca"
           volumeMounts:
