@@ -6,7 +6,6 @@ resources:
   - tls-store.yaml
   - wildcard-cert.yaml
 
-# Clean and simple: No more line 14 mapping errors!
 configMapGenerator:
   - name: traefik-external-config
     namespace: traefik
@@ -20,24 +19,40 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 34.0.0 
     valuesInline:
-      deployment:
+      # Keep your existing metrics/ports here, but we'll 
+      # handle the volumes via the patch below for reliability.
+      installCRDs: true
+      ingressClass:
         enabled: true
-        kind: Deployment
-        # These must be under 'deployment'
-        additionalVolumes:
-          - name: external-config
-            configMap:
-              name: traefik-external-config
-        additionalVolumeMounts:
-          - name: external-config
-            mountPath: /config
-            readOnly: true
-      
-      # These must be at the ROOT of the values, not under deployment
+        isDefaultClass: true
       additionalArguments:
         - "--providers.file.directory=/config"
         - "--providers.file.watch=true"
 
+# --- THE FIX: MANUAL INJECTION ---
+patches:
+  - target:
+      kind: Deployment
+      name: traefik
+      namespace: traefik
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: traefik
+      spec:
+        template:
+          spec:
+            containers:
+              - name: traefik
+                volumeMounts:
+                  - name: external-config
+                    mountPath: /config
+                    readOnly: true
+            volumes:
+              - name: external-config
+                configMap:
+                  name: traefik-external-config
       ingressClass:
         enabled: true
         isDefaultClass: true
