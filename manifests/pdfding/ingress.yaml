@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`pdfding.smeyer.ca`)
+    - match: Host(`pdf.smeyer.ca`)
       kind: Rule
       services:
         - name: pdfding
