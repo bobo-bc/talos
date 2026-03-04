@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: drawio-https
+  namespace: drawio
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`drawio.smeyer.ca`)
+      kind: Rule
+      services:
+        - name: drawio
+          port: 80
+  tls:
+    secretName: wildcard-smeyer-ca-tls # Use your existing wildcard cert secret
