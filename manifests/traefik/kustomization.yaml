@@ -21,7 +21,6 @@ helmCharts:
     version: 34.0.0 
     valuesInline:
       deployment:
-        kind: Deployment
         additionalVolumes:
           - name: external-config
             configMap:
