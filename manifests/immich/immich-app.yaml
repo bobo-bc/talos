@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://immich-app.github.io/immich-charts'
+    chart: immich
+    targetRevision: 0.8.1
+    helm:
+      values: |
+        # Let Helm handle the DB for simplicity
+        postgresql:
+          enabled: true
+          image:
+            repository: tensorchord/pgvecto-rs
+            tag: pg14-v0.2.0
+          persistence:
+            enabled: true
+            storageClass: "longhorn"
+            size: 10Gi
+        
+        # Redis for background tasks
+        redis:
+          enabled: true
+
+        # Your photo storage
+        persistence:
+          library:
+            enabled: true
+            size: 100Gi
+            storageClass: "longhorn"
+
+        # Traefik + Your Wildcard Cert
+        ingress:
+          main:
+            enabled: true
+            annotations:
+              kubernetes.io/ingress.class: traefik
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+            hosts:
+              - host: immich.smeyer.ca
+                paths:
+                  - path: /
+            tls:
+              - secretName: wildcard-smeyer-ca-tls
+
+        # RAM Protection for 8GB nodes
+        machine-learning:
+          resources:
+            limits:
+              memory: 2048Mi
+            requests:
+              memory: 1024Mi
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: immich
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
