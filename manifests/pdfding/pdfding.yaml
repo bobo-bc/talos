@@ -74,7 +74,7 @@ metadata:
   namespace: pdfding
 spec:
   ports:
-    - port: 8000
-      targetPort: 80
+    - port: 80
+      targetPort: 8000
   selector:
     app: pdfding
