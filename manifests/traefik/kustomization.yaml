@@ -5,7 +5,27 @@ resources:
   - dashboard-ingress.yaml
   - tls-store.yaml
   - wildcard-cert.yaml
-  # Removed the raw github URL to prevent conflicts with installCRDs: true
+
+# This creates the "external-services.yaml" file inside a ConfigMap
+configMapGenerator:
+  - name: traefik-external-config
+    namespace: traefik
+    literals:
+      - external-services.yaml=|
+        http:
+          routers:
+            plex-router:
+              rule: "Host(`plex.smeyer.ca`)"
+              entryPoints:
+                - web
+                - websecure
+              service: plex-external
+              tls: {} # Uses your wildcard cert automatically
+          services:
+            plex-external:
+              loadBalancer:
+                servers:
+                  - url: "http://10.0.2.10:32400"
 
 helmCharts:
   - name: traefik
@@ -16,6 +36,21 @@ helmCharts:
     valuesInline:
       deployment:
         kind: Deployment
+        # --- ADDED: Volume Mounts ---
+        additionalVolumes:
+          - name: external-config
+            configMap:
+              name: traefik-external-config
+        additionalVolumeMounts:
+          - name: external-config
+            mountPath: /config
+            readOnly: true
+      
+      # --- ADDED: Static Config Arguments ---
+      additionalArguments:
+        - "--providers.file.directory=/config"
+        - "--providers.file.watch=true"
+
       installCRDs: true
       ingressClass:
         enabled: true
@@ -25,7 +60,6 @@ helmCharts:
           entryPoint: metrics
       service:
         metrics:
-          # This creates the endpoint Prometheus will look for
           annotations:
             prometheus.io/scrape: "true"
             prometheus.io/port: "8082"
