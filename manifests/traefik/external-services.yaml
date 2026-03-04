@@ -1,0 +1,14 @@
+http:
+  routers:
+    plex-router:
+      rule: "Host(`plex.smeyer.ca`)"
+      entryPoints:
+        - web
+        - websecure
+      service: plex-external
+      tls: {}
+  services:
+    plex-external:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.2.10:32400"
