@@ -49,6 +49,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: pdfding-secrets # Kustomize handles the hash suffix for you!
+                  key: SECRET_KEY
             - name: ALLOWED_HOSTS
               value: "pdfding.smeyer.ca"
             - name: CSRF_TRUSTED_ORIGINS
