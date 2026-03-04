@@ -6,25 +6,12 @@ resources:
   - tls-store.yaml
   - wildcard-cert.yaml
 
+# Clean and simple: No more line 14 mapping errors!
 configMapGenerator:
   - name: traefik-external-config
     namespace: traefik
-    literals:
-      - external-services.yaml=|
-          http:
-            routers:
-              plex-router:
-                rule: "Host(`plex.smeyer.ca`)"
-                entryPoints:
-                  - web
-                  - websecure
-                service: plex-external
-                tls: {}
-            services:
-              plex-external:
-                loadBalancer:
-                  servers:
-                    - url: "http://10.0.2.10:32400"
+    files:
+      - external-services.yaml
 
 helmCharts:
   - name: traefik
@@ -49,4 +36,22 @@ helmCharts:
         - "--providers.file.watch=true"
 
       installCRDs: true
-      # ... (keep the rest of your metrics and ports as they were)
+      ingressClass:
+        enabled: true
+        isDefaultClass: true
+      metrics:
+        prometheus:
+          entryPoint: metrics
+      service:
+        metrics:
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "8082"
+      ports:
+        web:
+          exposedPort: 80
+        websecure:
+          exposedPort: 443
+        metrics:
+          port: 8082
+          exposedPort: 8082
