@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdfding-db-pvc
+  namespace: pdfding
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: longhorn # Matches your Longhorn setup
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdfding-data-pvc
+  namespace: pdfding
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Gi # Adjust based on your PDF library size
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdfding
+  namespace: pdfding
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # Ensure only one pod writes to the DB at a time
+  selector:
+    matchLabels:
+      app: pdfding
+  template:
+    metadata:
+      labels:
+        app: pdfding
+    spec:
+      containers:
+        - name: pdfding
+          image: mrmn2/pdfding:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pdfding-secrets # Kustomize handles the hash suffix for you!
+            - name: ALLOWED_HOSTS
+              value: "pdfding.smeyer.ca"
+            - name: CSRF_TRUSTED_ORIGINS
+              value: "https://pdfding.smeyer.ca"
+          volumeMounts:
+            - name: db-storage
+              mountPath: /app/db
+            - name: data-storage
+              mountPath: /app/data
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: pdfding-db-pvc
+        - name: data-storage
+          persistentVolumeClaim:
+            claimName: pdfding-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdfding
+  namespace: pdfding
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: pdfding
+
+
+
+containers:
+        - name: pdfding
+          image: mrmn2/pdfding:latest
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pdfding-secrets  # The name you used in 'kubectl create secret'
+                  key: SECRET_KEY        # The key inside that secret
+            - name: ALLOWED_HOSTS
+              value: "pdfding.smeyer.ca"
+            - name: CSRF_TRUSTED_ORIGINS
+              value: "https://pdfding.smeyer.ca"
