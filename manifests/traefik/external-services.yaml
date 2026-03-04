@@ -67,7 +67,7 @@ http:
     pve-external:
       loadBalancer:
         servers:
-          - url: "https://10.0.0.10:8006"
+          - url: "https://10.0.0.5:8006"
         serversTransport: insecureTransport
 
     argo-external:
