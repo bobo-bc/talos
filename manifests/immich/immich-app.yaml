@@ -11,7 +11,7 @@ spec:
     targetRevision: 0.8.1
     helm:
       values: |
-        # Let Helm handle the DB for simplicity
+        # Bundled Postgres with AI extension
         postgresql:
           enabled: true
           image:
@@ -22,18 +22,30 @@ spec:
             storageClass: "longhorn"
             size: 10Gi
         
-        # Redis for background tasks
         redis:
           enabled: true
 
-        # Your photo storage
+        # Main Photo Library
         persistence:
           library:
             enabled: true
             size: 100Gi
             storageClass: "longhorn"
+            accessMode: ReadWriteOnce
 
-        # Traefik + Your Wildcard Cert
+        # THE FIX: Explicitly handle Machine Learning persistence
+        machine-learning:
+          enabled: true
+          persistence:
+            cache:
+              enabled: true
+              type: emptyDir  # Uses node RAM/disk temporarily for AI models
+          resources:
+            limits:
+              memory: 2048Mi
+            requests:
+              memory: 1024Mi
+
         ingress:
           main:
             enabled: true
@@ -47,14 +59,6 @@ spec:
                   - path: /
             tls:
               - secretName: wildcard-smeyer-ca-tls
-
-        # RAM Protection for 8GB nodes
-        machine-learning:
-          resources:
-            limits:
-              memory: 2048Mi
-            requests:
-              memory: 1024Mi
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: immich
