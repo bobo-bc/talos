@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pdfding
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Use the official URL from their docs
+    repoURL: 'https://charts.pdfding.com'
+    chart: pdfding
+    targetRevision: 0.1.x
+    helm:
+      values: |
+        config:
+          # This maps exactly to the Django ALLOWED_HOSTS
+          allowedHosts: "pdf.smeyer.ca"
+          csrfTrustedOrigins: "https://pdf.smeyer.ca"
+          # Links to the secret we created above
+          existingSecret: "pdfding-secrets"
+        
+        persistence:
+          data:
+            enabled: true
+            storageClass: "longhorn"
+            size: 10Gi
+          db:
+            enabled: true
+            storageClass: "longhorn"
+            size: 1Gi
+
+        ingress:
+          enabled: true
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          hosts:
+            - host: pdf.smeyer.ca
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: wildcard-smeyer-ca-tls
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: pdfding
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
