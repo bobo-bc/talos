@@ -21,6 +21,9 @@ helmCharts:
     version: 34.0.0 
     valuesInline:
       deployment:
+        enabled: true
+        kind: Deployment
+        # These must be under 'deployment'
         additionalVolumes:
           - name: external-config
             configMap:
@@ -30,14 +33,15 @@ helmCharts:
             mountPath: /config
             readOnly: true
       
+      # These must be at the ROOT of the values, not under deployment
       additionalArguments:
         - "--providers.file.directory=/config"
         - "--providers.file.watch=true"
 
-      installCRDs: true
       ingressClass:
         enabled: true
         isDefaultClass: true
+      # ... rest of your config
       metrics:
         prometheus:
           entryPoint: metrics
