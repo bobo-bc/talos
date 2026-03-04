@@ -1,26 +1,22 @@
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: plex-ingress
-  namespace: media
-spec:
-  entryPoints:
-    - web        # Port 80
-    - websecure  # Port 443
-  routes:
-  - match: Host(`plex.smeyer.ca`)
-    kind: Rule
-    services:
-    - name: plex-backend
-      port: 32400
----
-apiVersion: traefik.io/v1alpha1
-kind: TraefikService
-metadata:
-  name: plex-backend
-  namespace: media
-spec:
-  # This is the "Magic" - it tells Traefik to go straight to the IP 
-  # and skip all Kubernetes endpoint/pod discovery.
-  externalName: 10.0.2.10
+  name: traefik-external-config
+  namespace: traefik # Ensure this is the same namespace where Traefik is installed
+data:
+  external-services.yaml: |
+    http:
+      routers:
+        plex-router:
+          rule: "Host(`plex.smeyer.ca`)"
+          entryPoints:
+            - web
+            - websecure
+          service: plex-external
+          tls: {} # Enables SSL if you have a default cert/cert-manager
+      
+      services:
+        plex-external:
+          loadBalancer:
+            servers:
+              - url: "http://10.0.2.10:32400"
