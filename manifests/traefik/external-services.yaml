@@ -1,14 +1,87 @@
 http:
   routers:
+    # --- Redirect HTTP to HTTPS ---
+    http-catchall:
+      rule: "HostRegexp(`{host:.+}`)"
+      entryPoints: ["web"]
+      middlewares: ["redirect-to-https"]
+      service: "noop" # Necessary but never reached
+
+    # --- Your Services ---
     plex-router:
       rule: "Host(`plex.smeyer.ca`)"
-      entryPoints:
-        - web
-        - websecure
+      entryPoints: ["websecure"]
       service: plex-external
       tls: {}
+
+    unifi-router:
+      rule: "Host(`unifi.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: unifi-external
+      tls: {}
+
+    pve-router:
+      rule: "Host(`pve.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: pve-external
+      tls: {}
+
+    argo-router:
+      rule: "Host(`argo.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: argo-external
+      tls: {}
+
+    longhorn-router:
+      rule: "Host(`longhorn.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: longhorn-external
+      tls: {}
+
+  # --- Middleware Definitions ---
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  # --- Service Definitions ---
   services:
+    # A dummy service for the redirector
+    noop:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1"
+
     plex-external:
       loadBalancer:
         servers:
           - url: "http://10.0.2.10:32400"
+
+    unifi-external:
+      loadBalancer:
+        servers:
+          - url: "https://10.0.0.1:443"
+        serversTransport: insecureTransport
+
+    pve-external:
+      loadBalancer:
+        servers:
+          - url: "https://10.0.0.10:8006"
+        serversTransport: insecureTransport
+
+    argo-external:
+      loadBalancer:
+        servers:
+          - url: "https://10.0.0.66:443" 
+        serversTransport: insecureTransport
+
+    longhorn-external:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.65:80"
+
+  # --- Global Transport Settings ---
+  serversTransports:
+    insecureTransport:
+      insecureSkipVerify: true
