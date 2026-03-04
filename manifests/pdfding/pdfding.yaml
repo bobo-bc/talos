@@ -8,8 +8,8 @@ spec:
   source:
     # Use the official URL from their docs
     repoURL: 'https://charts.pdfding.com'
-    chart: pdfding
-    targetRevision: 0.1.x
+    chart: pdfding/pdfding
+    targetRevision: latest
     helm:
       values: |
         config:
