@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     # Use the official URL from their docs
-    repoURL: ''https://mrmn2.github.io/pdfding'
+    repoURL: 'https://mrmn2.github.io/pdfding'
     chart: pdfding
     targetRevision: 0.1.x
     helm:
