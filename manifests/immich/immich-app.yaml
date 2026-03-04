@@ -25,21 +25,17 @@ spec:
         redis:
           enabled: true
 
-        # Main Photo Library
+        # THE FIX: Point to the PVC we created in Step 1
         persistence:
           library:
-            enabled: true
-            size: 100Gi
-            storageClass: "longhorn"
-            accessMode: ReadWriteOnce
+            existingClaim: "immich-library-pvc"
 
-        # THE FIX: Explicitly handle Machine Learning persistence
         machine-learning:
           enabled: true
           persistence:
             cache:
               enabled: true
-              type: emptyDir  # Uses node RAM/disk temporarily for AI models
+              type: emptyDir
           resources:
             limits:
               memory: 2048Mi
@@ -66,5 +62,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
