@@ -57,6 +57,17 @@ spec:
         
         redis:
           enabled: true
+          # THE FIX: Switch to the official light-weight image
+          image:
+            repository: redis
+            tag: 7-alpine
+          architecture: standalone
+          master:
+            persistence:
+              enabled: true
+              storageClass: "longhorn"
+              size: 2Gi
+          enabled: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: immich
