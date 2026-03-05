@@ -17,6 +17,20 @@ spec:
             library:
               existingClaim: "immich-library-pvc"
           
+          # RELAXED PROBES: Giving the server 5 minutes to finish migrations
+          server:
+            startupProbe:
+              initialDelaySeconds: 60
+              periodSeconds: 10
+              failureThreshold: 30
+          
+          # Also relaxing microservices as it shares the same DB dependency
+          microservices:
+            startupProbe:
+              initialDelaySeconds: 60
+              periodSeconds: 10
+              failureThreshold: 30
+
           machine-learning:
             enabled: true
             persistence:
@@ -63,12 +77,10 @@ spec:
           master:
             persistence:
               enabled: false
-            # Permission fix from your working github config
             podSecurityContext:
               fsGroup: 999
             containerSecurityContext:
               runAsUser: 999
-          # Fixed indentation: aligned with 'master'
           commonConfiguration: |
             appendonly no
             save ""
