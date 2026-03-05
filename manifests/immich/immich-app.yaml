@@ -11,6 +11,10 @@ spec:
     targetRevision: 0.8.1
     helm:
       values: |
+        immich:
+          persistence:
+            library:
+              existingClaim: "immich-library-pvc"      
         # Bundled Postgres with AI extension
         postgresql:
           enabled: true
@@ -24,12 +28,7 @@ spec:
         
         redis:
           enabled: true
-
-        # THE FIX: Point to the PVC we created in Step 1
-        persistence:
-          library:
-            existingClaim: "immich-library-pvc"
-
+          
         machine-learning:
           enabled: true
           persistence:
