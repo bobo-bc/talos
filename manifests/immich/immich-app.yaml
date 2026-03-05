@@ -17,7 +17,6 @@ spec:
             library:
               existingClaim: "immich-library-pvc"
           
-          # Move Machine Learning and Ingress inside 'immich'
           machine-learning:
             enabled: true
             persistence:
@@ -57,18 +56,23 @@ spec:
         
         redis:
           enabled: true
-          # THE FIX: Switch to the official light-weight image
+          architecture: standalone
           image:
             repository: valkey/valkey
             tag: 8-bookworm
-          architecture: standalone
           master:
             persistence:
               enabled: false
-        # Use node RAM/Disk for temporary cache
+            # Permission fix from your working github config
+            podSecurityContext:
+              fsGroup: 999
+            containerSecurityContext:
+              runAsUser: 999
+          # Fixed indentation: aligned with 'master'
           commonConfiguration: |
             appendonly no
             save ""
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: immich
@@ -76,3 +80,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
