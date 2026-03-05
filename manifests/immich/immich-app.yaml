@@ -64,10 +64,11 @@ spec:
           architecture: standalone
           master:
             persistence:
-              enabled: true
-              storageClass: "longhorn"
-              size: 2Gi
-          enabled: true
+              enabled: false
+        # Use node RAM/Disk for temporary cache
+          commonConfiguration: |
+            appendonly no
+            save ""
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: immich
