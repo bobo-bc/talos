@@ -11,11 +11,40 @@ spec:
     targetRevision: 0.8.1
     helm:
       values: |
+        # 1. DISABLE ALL INTERNAL DEPENDENCIES
+        # We handle these manually for Talos stability
+        postgresql:
+          enabled: false
+        redis:
+          enabled: false
+        valkey:
+          enabled: false
+
+        # 2. MAIN IMMICH CONFIGURATION
         immich:
           persistence:
             library:
               existingClaim: "immich-library-pvc"
           
+          # Networking: Point to your manual services
+          configuration:
+            database:
+              host: "immich-postgresql" # Your manual service name
+              port: 5432
+              user: "postgres"
+              database: "immich"
+            redis:
+              host: "redis" # Your manual service name
+          
+          # Database Authentication: Injects password into all Immich pods
+          extraEnvVars:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-db-secret
+                  key: DB_PASSWORD
+
+          # Component Specifics
           server:
             startupProbe:
               initialDelaySeconds: 60
@@ -53,35 +82,6 @@ spec:
                     - path: /
               tls:
                 - secretName: wildcard-smeyer-ca-tls
-
-        postgresql:
-          enabled: true
-          image:
-            repository: tensorchord/pgvecto-rs
-            tag: pg14-v0.2.0
-          persistence:
-            enabled: true
-            storageClass: "longhorn"
-            size: 10Gi
-        
-        # THE FIX: Rename 'redis' to 'valkey'
-        valkey:
-          enabled: true
-          architecture: standalone
-          image:
-            repository: valkey/valkey
-            tag: 8-bookworm
-          master:
-            persistence:
-              enabled: false
-            # Talos security requirement
-            podSecurityContext:
-              fsGroup: 999
-            containerSecurityContext:
-              runAsUser: 999
-          commonConfiguration: |
-            appendonly no
-            save ""
 
   destination:
     server: 'https://kubernetes.default.svc'
