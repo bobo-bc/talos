@@ -11,23 +11,21 @@ spec:
   source:
     repoURL: 'https://immich-app.github.io/immich-charts'
     chart: immich
-    targetRevision: 0.10.*
+    targetRevision: 0.10.3
     helm:
       values: |
-        # Disable internal sub-charts
-        postgresql: { enabled: false }
-        redis: { enabled: false }
-        valkey: { enabled: false }
-
-        # This section is the "Engine Room" from your k3s config
-        env:
-          REDIS_HOSTNAME: "immich-redis"
-          DB_HOSTNAME: "immich-postgresql"
-          DB_USERNAME: "postgres"
-          DB_DATABASE_NAME: "immich"
+        # --- DO NOT ADD 'postgresql' or 'redis' KEYS HERE ---
 
         immich:
-          # Injects the password from your prerequisite secret
+          configuration:
+            database:
+              host: "immich-postgresql"
+              port: 5432
+              user: "postgres"
+              database: "immich"
+            redis:
+              host: "redis" # Matches your manual service name
+          
           extraEnvVars:
             - name: DB_PASSWORD
               valueFrom:
@@ -38,13 +36,12 @@ spec:
           persistence:
             library:
               existingClaim: "immich-library-pvc"
-          
-          # Relaxing probes to stop the "Disappearing Pod" act
+
           server:
             startupProbe:
               initialDelaySeconds: 60
               periodSeconds: 10
-              failureThreshold: 60 # 10 mins total
+              failureThreshold: 60
           
           microservices:
             startupProbe:
@@ -72,7 +69,6 @@ spec:
               tls:
                 - secretName: wildcard-smeyer-ca-tls
 
-  # --- THIS IS THE NEW BLOCK ---
   ignoreDifferences:
     - group: apps
       kind: Deployment
@@ -90,4 +86,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - RespectIgnoreDifferences=true # <--- CRITICAL: Tells Argo to respect the ignore block during Sync
+      - RespectIgnoreDifferences=true
