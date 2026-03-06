@@ -37,7 +37,7 @@ spec:
           # Corrected Startup Probe to match your containerPort
           startupProbe:
             httpGet:
-              path: /api/server/ping
+              path: /api/server-ino/ping
               port: 3001
             failureThreshold: 30
             periodSeconds: 10
