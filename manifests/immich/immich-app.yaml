@@ -18,7 +18,7 @@ spec:
 
         # This section is the "Engine Room" from your k3s config
         env:
-          REDIS_HOSTNAME: "redis"
+          REDIS_HOSTNAME: "immich-redis"
           DB_HOSTNAME: "immich-postgresql"
           DB_USERNAME: "postgres"
           DB_DATABASE_NAME: "immich"
