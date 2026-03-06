@@ -1,4 +1,3 @@
-# Immich server
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:v2.0.0
+          image: ghcr.io/immich-app/immich-server:v1.106.1 # Using a stable tag
           ports:
             - containerPort: 3001
           env:
@@ -25,7 +24,7 @@ spec:
                 secretKeyRef:
                   name: immich-db-secret
                   key: DB_URL
-            - name: REDIS_HOST
+            - name: REDIS_HOSTNAME
               value: immich-redis
             - name: REDIS_PORT
               value: "6379"
@@ -33,10 +32,19 @@ spec:
               value: "3001"
             - name: NODE_ENV
               value: production
-            - name: IMMICH_LOG_LEVEL
-              value: log
             - name: TZ
               value: America/Vancouver
-     persistence:
-            library:
-              existingClaim: "immich-library-pvc"
+          # Corrected Startup Probe to match your containerPort
+          startupProbe:
+            httpGet:
+              path: /api/server/ping
+              port: 3001
+            failureThreshold: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library-pvc # Updated to your existing PVC
