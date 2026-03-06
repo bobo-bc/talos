@@ -1,0 +1,38 @@
+# Immich microservices
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-microservices
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-microservices
+  template:
+    metadata:
+      labels:
+        app: immich-microservices
+    spec:
+      containers:
+        - name: immich-microservices
+          image: ghcr.io/immich-app/immich-microservices:v2.3.1
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: immich-db-secret
+                  key: DB_URL
+            - name: REDIS_HOST
+              value: immich-redis
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NODE_ENV
+              value: production
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library
