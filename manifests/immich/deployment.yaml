@@ -37,10 +37,6 @@ spec:
               value: log
             - name: TZ
               value: America/Vancouver
-          volumeMounts:
-            - name: library
-              mountPath: /usr/src/app/upload
-      volumes:
-        - name: library
-          persistentVolumeClaim:
-            claimName: nfs-photos
+     persistence:
+            library:
+              existingClaim: "immich-library-pvc"
