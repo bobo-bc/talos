@@ -11,20 +11,17 @@ spec:
     targetRevision: 0.8.1
     helm:
       values: |
-        # All main app settings must be under this 'immich' key
         immich:
           persistence:
             library:
               existingClaim: "immich-library-pvc"
           
-          # RELAXED PROBES: Giving the server 5 minutes to finish migrations
           server:
             startupProbe:
               initialDelaySeconds: 60
               periodSeconds: 10
               failureThreshold: 30
           
-          # Also relaxing microservices as it shares the same DB dependency
           microservices:
             startupProbe:
               initialDelaySeconds: 60
@@ -57,7 +54,6 @@ spec:
               tls:
                 - secretName: wildcard-smeyer-ca-tls
 
-        # Redis and Postgres are 'sub-charts', so they stay at the top level
         postgresql:
           enabled: true
           image:
@@ -68,7 +64,8 @@ spec:
             storageClass: "longhorn"
             size: 10Gi
         
-        redis:
+        # THE FIX: Rename 'redis' to 'valkey'
+        valkey:
           enabled: true
           architecture: standalone
           image:
@@ -77,6 +74,7 @@ spec:
           master:
             persistence:
               enabled: false
+            # Talos security requirement
             podSecurityContext:
               fsGroup: 999
             containerSecurityContext:
