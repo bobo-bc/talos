@@ -11,23 +11,23 @@ spec:
   source:
     repoURL: 'https://immich-app.github.io/immich-charts'
     chart: immich
-    targetRevision: 0.10.*
+    targetRevision: 0.10.3
     helm:
       values: |
-        # Disable internal sub-charts
-        postgresql: { enabled: false }
-        redis: { enabled: false }
-        valkey: { enabled: false }
-
-        # This section is the "Engine Room" from your k3s config
-        env:
-          REDIS_HOSTNAME: "immich-redis"
-          DB_HOSTNAME: "immich-postgresql"
-          DB_USERNAME: "postgres"
-          DB_DATABASE_NAME: "immich"
+        # IMPORTANT: The 'postgresql' and 'redis' top-level keys 
+        # MUST BE REMOVED to pass the chart's internal checks.
 
         immich:
-          # Injects the password from your prerequisite secret
+          # This is where 0.10.x looks for connection details
+          configuration:
+            database:
+              host: "immich-postgresql"
+              port: 5432
+              user: "postgres"
+              database: "immich"
+            redis:
+              host: "redis"
+          
           extraEnvVars:
             - name: DB_PASSWORD
               valueFrom:
@@ -38,13 +38,12 @@ spec:
           persistence:
             library:
               existingClaim: "immich-library-pvc"
-          
-          # Relaxing probes to stop the "Disappearing Pod" act
+
           server:
             startupProbe:
               initialDelaySeconds: 60
               periodSeconds: 10
-              failureThreshold: 60 # 10 mins total
+              failureThreshold: 60
           
           microservices:
             startupProbe:
@@ -71,3 +70,9 @@ spec:
                     - path: /
               tls:
                 - secretName: wildcard-smeyer-ca-tls
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
