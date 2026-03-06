@@ -62,3 +62,16 @@ spec:
         resources:
           requests:
             storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-postgresql # This is the "phone number" the server will call
+  namespace: immich
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: immich-postgresql-0
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
