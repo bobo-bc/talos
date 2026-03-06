@@ -7,3 +7,4 @@ resources:
   - machinelearning.yaml
   - redis.yaml
   - server-service.yaml
+  - postgres.yaml
