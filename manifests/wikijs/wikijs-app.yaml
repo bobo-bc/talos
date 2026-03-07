@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wikijs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: wiki
+    repoURL: https://charts.js.wiki
+    targetRevision: 6.x.x # Use the latest v6 chart
+    helm:
+      values: |
+        image:
+          tag: 2.5 # Latest stable v2
+      extraEnv:
+         - name: DB_PASS
+           valueFrom:
+              secretKeyRef:
+                name: wikijs-db-pass
+                key: password  
+        # 1. Ingress & TLS Configuration
+        ingress:
+          enabled: true
+          className: nginx  # Or 'traefik' depending on your ingress controller
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            kubernetes.io/tls-acme: "true"
+          hosts:
+            - host: wiki.smeyer.ca
+              paths:
+                - path: /
+          tls:
+            - secretName: wiki-smeyer-ca-tls
+              hosts:
+                - wiki.smeyer.ca
+
+        # 2. Database Configuration
+        # The chart bundles Postgres by default. 
+        # Since you're on Talos, ensure it uses your Longhorn storage class.
+        postgresql:
+          enabled: true
+          persistence:
+            enabled: true
+            storageClass: "longhorn" 
+            size: 8Gi
+          auth:
+            database: wikijs
+            username: wikijs
+            existingSecret: "wikijs-db-pass"
+            secretKeys:
+              adminPasswordKey: "postgres-password"
+              userPasswordKey: "password"
+
+        # 3. Wiki.js Persistence (for side-loaded themes/assets)
+        persistence:
+          enabled: true
+          storageClass: "longhorn"
+          size: 5Gi
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: wikijs
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    createNamespace: true
