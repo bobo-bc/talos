@@ -15,14 +15,13 @@ spec:
           tag: 2.5.312 
 
         # 1. Wiki.js Native Database Connection
-        # This tells the Wiki.js APP where to find the password
         postgresql:
           enabled: true
+          # Connection info for the App
           existingSecret: "wikijs-db-pass"
           existingSecretKey: "password"
           
           # 2. PostgreSQL Sub-Chart Configuration
-          # This tells the DATABASE POD to use your secret for its credentials
           auth:
             database: wikijs
             username: wikijs
@@ -35,17 +34,20 @@ spec:
             storageClass: "longhorn" 
             size: 8Gi
 
-        # 3. Ingress & TLS (wiki.smeyer.ca)
+        # 3. Ingress & TLS (Updated for Traefik)
         ingress:
           enabled: true
-          className: nginx 
+          className: traefik  # Changed from nginx
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
             kubernetes.io/tls-acme: "true"
+            # Traefik often prefers this for SSL redirection if you have it set up
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
           hosts:
             - host: wiki.smeyer.ca
               paths:
                 - path: /
+                  pathType: Prefix # Vital for Traefik to route correctly
           tls:
             - secretName: wiki-smeyer-ca-tls
               hosts:
