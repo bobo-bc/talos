@@ -19,11 +19,12 @@ spec:
         image: qmcgaw/gluetun:latest
         securityContext:
           capabilities:
-            add: ["NET_ADMIN"] # Required for VPN tunnel
-          privileged: true
+            add: ["NET_ADMIN"]
         env:
         - name: VPN_SERVICE_PROVIDER
           value: "nordvpn"
+        - name: VPN_TYPE
+          value: "openvpn"
         - name: OPENVPN_USER
           valueFrom:
             secretKeyRef:
@@ -35,8 +36,7 @@ spec:
               name: vpn-auth
               key: password
         - name: SERVER_COUNTRIES
-          value: "Canada" # Or your preferred location
-        # Transmission's Web UI Port must be opened here in Gluetun
+          value: "Canada"
         ports:
         - containerPort: 9091
           name: http-web
@@ -46,12 +46,8 @@ spec:
           protocol: UDP
           name: torrent-udp
         volumeMounts:
-          - name: tun
-            mountPath: /dev/net/tun
-        volumes:
-          - name: tun
-            hostPath:
-              path: /dev/net/tun
+        - name: tun
+          mountPath: /dev/net/tun
       # --- CONTAINER 2: TRANSMISSION ---
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
@@ -62,23 +58,29 @@ spec:
           value: "1000"
         - name: TZ
           value: "America/Vancouver"
-        - name: USER # Web UI Username
+        - name: USER
           value: "admin"
-        - name: PASS # Web UI Password
-          value: "Hurts2p33"
+        - name: PASS
+          valueFrom:
+            secretKeyRef:
+              name: transmission-auth
+              key: password
         volumeMounts:
         - name: config
           mountPath: /config
         - name: downloads
           mountPath: /data
-
+      # --- VOLUMES (must be at spec level, not inside a container) ---
       volumes:
+      - name: tun
+        hostPath:
+          path: /dev/net/tun
       - name: config
         persistentVolumeClaim:
           claimName: transmission-config-pvc
       - name: downloads
         persistentVolumeClaim:
-          claimName: nfs-media-pvc # Points to your existing NFS mount
+          claimName: nfs-media-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -120,8 +122,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 2Gi 
-  # If you have a specific storage class (like longhorn or local-path), add it here:
-  # storageClassName: longhorn
+      storage: 2Gi
