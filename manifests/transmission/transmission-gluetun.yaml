@@ -45,7 +45,13 @@ spec:
         - containerPort: 51413
           protocol: UDP
           name: torrent-udp
-
+        volumeMounts:
+          - name: tun
+            mountPath: /dev/net/tun
+        volumes:
+          - name: tun
+            hostPath:
+              path: /dev/net/tun
       # --- CONTAINER 2: TRANSMISSION ---
       - name: transmission
         image: lscr.io/linuxserver/transmission:latest
