@@ -8,20 +8,34 @@ spec:
   source:
     chart: wiki
     repoURL: https://charts.js.wiki
-    targetRevision: 6.x.x
+    targetRevision: 3.0.0
     helm:
       values: |
         image:
-          tag: 2.5 
+          tag: 2.5.312 
 
-        # Corrected: extraEnv must be at the same level as 'image'
-        extraEnv:
-          - name: DB_PASS
-            valueFrom:
-              secretKeyRef:
-                name: wikijs-db-pass
-                key: password
+        # 1. Wiki.js Native Database Connection
+        # This tells the Wiki.js APP where to find the password
+        postgresql:
+          enabled: true
+          existingSecret: "wikijs-db-pass"
+          existingSecretKey: "password"
+          
+          # 2. PostgreSQL Sub-Chart Configuration
+          # This tells the DATABASE POD to use your secret for its credentials
+          auth:
+            database: wikijs
+            username: wikijs
+            existingSecret: "wikijs-db-pass"
+            secretKeys:
+              adminPasswordKey: "postgres-password"
+              userPasswordKey: "password"
+          persistence:
+            enabled: true
+            storageClass: "longhorn" 
+            size: 8Gi
 
+        # 3. Ingress & TLS (wiki.smeyer.ca)
         ingress:
           enabled: true
           className: nginx 
@@ -37,20 +51,7 @@ spec:
               hosts:
                 - wiki.smeyer.ca
 
-        postgresql:
-          enabled: true
-          persistence:
-            enabled: true
-            storageClass: "longhorn" 
-            size: 8Gi
-          auth:
-            database: wikijs
-            username: wikijs
-            existingSecret: "wikijs-db-pass"
-            secretKeys:
-              adminPasswordKey: "postgres-password"
-              userPasswordKey: "password"
-
+        # 4. Wiki.js Asset Persistence
         persistence:
           enabled: true
           storageClass: "longhorn"
