@@ -37,6 +37,10 @@ spec:
               key: password
         - name: SERVER_COUNTRIES
           value: "Canada"
+        - name: FIREWALL_INBOUND_SUBNETS
+          value: "10.0.0.0/8"
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: "10.0.0.0/8"
         ports:
         - containerPort: 9091
           name: http-web
