@@ -8,21 +8,23 @@ spec:
   source:
     chart: wiki
     repoURL: https://charts.js.wiki
-    targetRevision: 6.x.x # Use the latest v6 chart
+    targetRevision: 6.x.x
     helm:
       values: |
         image:
-          tag: 2.5 # Latest stable v2
-      extraEnv:
-         - name: DB_PASS
-           valueFrom:
+          tag: 2.5 
+
+        # Corrected: extraEnv must be at the same level as 'image'
+        extraEnv:
+          - name: DB_PASS
+            valueFrom:
               secretKeyRef:
                 name: wikijs-db-pass
-                key: password  
-        # 1. Ingress & TLS Configuration
+                key: password
+
         ingress:
           enabled: true
-          className: nginx  # Or 'traefik' depending on your ingress controller
+          className: nginx 
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
             kubernetes.io/tls-acme: "true"
@@ -35,9 +37,6 @@ spec:
               hosts:
                 - wiki.smeyer.ca
 
-        # 2. Database Configuration
-        # The chart bundles Postgres by default. 
-        # Since you're on Talos, ensure it uses your Longhorn storage class.
         postgresql:
           enabled: true
           persistence:
@@ -52,7 +51,6 @@ spec:
               adminPasswordKey: "postgres-password"
               userPasswordKey: "password"
 
-        # 3. Wiki.js Persistence (for side-loaded themes/assets)
         persistence:
           enabled: true
           storageClass: "longhorn"
