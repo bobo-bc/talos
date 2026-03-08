@@ -27,6 +27,8 @@ spec:
                 secretKeyRef:
                   name: wikijs-db-pass
                   key: password
+            - name: PGDATA
+              mountPath: /var/lib/postgreql/data
           ports:
             - containerPort: 5432
           volumeMounts:
