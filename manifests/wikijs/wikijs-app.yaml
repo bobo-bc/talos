@@ -39,7 +39,7 @@ spec:
           enabled: true
           className: traefik  # Changed from nginx
           annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
+            cert-manager.io/cluster-issuer: letsencrypt-production
             kubernetes.io/tls-acme: "true"
             # Traefik often prefers this for SSL redirection if you have it set up
             traefik.ingress.kubernetes.io/router.entrypoints: websecure
