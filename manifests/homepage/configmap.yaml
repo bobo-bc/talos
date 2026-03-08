@@ -1,0 +1,235 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+  namespace: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+
+  docker.yaml: ""
+
+  proxmox.yaml: ""
+
+  custom.css: ""
+
+  custom.js: ""
+
+  settings.yaml: |
+    backgroundOpacity: 0.6
+    cardBlur: md
+    headerStyle: underlined
+    background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+    title: Bobo Homepage
+    statusStyle: "dot"
+    hideVersion: false
+    disableUpdateCheck: false
+    useEqualHeights: true
+    layout:
+      Media:
+        columns: 4
+        style: row
+        icon: mdi-folder-multiple-image
+      Apps:
+        columns: 5
+        style: row
+        icon: mdi-folder-multiple-image
+      Infra:
+        columns: 5
+        style: row
+        icon: mdi-folder-multiple-image
+      Host:
+        columns: 5
+        style: row
+        icon: mdi-folder-multiple-image
+
+  bookmarks.yaml: |
+    - Proxmox:
+        - proxmox backup server install instructions:
+            - abbr: pb
+              icon: proxmox.png
+              href: https://4sysops.com/archives/proxmox-backup-server-install-and-configure/
+        - proxmox helper scripts:
+            - abbr: ph
+              icon: https://raw.githubusercontent.com/tteck/Proxmox/main/misc/images/logo.png
+              href: https://community-scripts.github.io/ProxmoxVE/scripts
+        - dietpi proxmox installer:
+            - abbr: pi
+              icon: https://e7.pngegg.com/pngimages/558/768/png-clipart-logo-debian-gnu-linux-computer-icons-linux.png
+              href: https://github.com/dazeb/proxmox-dietpi-installer
+        - dietpi lxc:
+            - abbr: dx
+              icon: https://www.unixmen.com/wp-content/uploads/2014/07/LXC.png
+              href: https://dietpi.com/blog/?p=2642
+    - Build:
+        - Namecheap:
+            - abbr: nr
+              icon: https://images.seeklogo.com/logo-png/27/2/namecheap-logo-png_seeklogo-273737.png
+              href: https://www.namecheap.com/
+        - Cloudflare:
+            - abbr: cf
+              icon: cloudflare.png
+              href: https://www.cloudflare.com/en-ca/
+        - My GitHub:
+            - abbr: GH
+              icon: git.png
+              href: https://github.com/bobo-bc/k3s
+        - icons:
+            - abbr: DR
+              icon: homepage.png
+              href: https://github.com/homarr-labs/dashboard-icons/tree/main/svg
+    - Reference:
+        - Dockerholics:
+            - abbr: DH
+              icon: docker.png
+              href: https://petersem.github.io/dockerholics/
+        - Swarm:
+            - abbr: ds
+              icon: docker-moby.png
+              href: https://rpi4cluster.com/docker-swarm-intro/
+        - Piupmylife:
+            - abbr: UP
+              icon: https://pimylifeup.com/wp-content/uploads/2021/02/pimylifeup-square-logo.png
+              href: https://pimylifeup.com
+        - Coursiv AI learning:
+            - abbr: AI
+              icon: https://blog.coursiv.io/api/media/file/coursiv-logo.svg
+              href: https://coursiv.io/en
+
+  services.yaml: |
+    - Apps:
+        - HomeAssistant:
+            icon: home-assistant.png
+            href: http://10.0.2.4:8123/
+            description: home automation
+        - GitHub Blog:
+            icon: github-light.png
+            href: https://smeyer.ca/
+            description: my blog
+        - Ghost:
+            icon: ghost-light.png
+            href: https://ghost.smeyer.ca/
+            description: my nicer, newer blog
+        - Wikijs:
+            icon: wikijs.png
+            href: https://wiki.smeyer.ca/
+            description: notes curation
+        - Drawio:
+            icon: draw-io.png
+            href: https://drawio.smeyer.ca/
+            description: Drawing tool
+        - Compose Tool Box:
+            icon: docker-moby.png
+            href: https://compose.smeyer.ca/
+            description: compose file review tool
+        - IT-Tool:
+            icon: it-tools.png
+            href: http://tools.smeyer.ca/
+            description: toolbox of goodness
+        - PDFding:
+            icon: pdfding-light.png
+            href: https://pdf.smeyer.ca/
+            description: pdf editing tool
+        - Adminer:
+            icon: adminer.png
+            href: http://db.smeyer.ca/
+            description: database management interface
+        - Giftful:
+            icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
+            href: https://giftful.com/stevenmeyer2
+            description: gift registry of things that I covet
+    - Infra:
+        - Unifi Gateway:
+            icon: ubiquiti-unifi.png
+            href: https://unifi.smeyer.ca/
+            description: network router and DNS
+        - Proxmox:
+            icon: proxmox.png
+            href: https://pve.smeyer.ca/
+            description: proxmox host
+        - Argo-CD:
+            icon: argo-cd.png
+            href: https://argo.smeyer.ca/
+            description: App deployment
+        - Portainer:
+            icon: portainer-alt.png
+            href: https://portainer.smeyer.ca/
+            description: k3s/docker management
+        - Traefik Dashboard:
+            icon: traefik.png
+            href: https://traefik.smeyer.ca/dashboard/
+            description: k3s reverse proxy
+        - Nginx Proxy Manager:
+            icon: npm.png
+            href: https://proxy.smeyer.ca/
+            description: proxy management
+        - Pulse Monitoring:
+            icon: pulse.png
+            href: https://monitor.smeyer.ca/
+            description: Monitoring
+        - Skooner:
+            icon: kubernetes.png
+            href: http://skooner.smeyer.ca/
+            description: Kubernetes Monitoring
+        - Longhorn:
+            icon: longhorn.png
+            href: http://longhorn.smeyer.ca/
+            description: storage
+        - Uptime Kuma:
+            icon: uptime-kuma.png
+            href: http://uptime.smeyer.ca
+            description: uptime tracking
+        - Proxmox Backup Server:
+            icon: proxmox-light.png
+            href: https://pbs.smeyer.ca/
+            description: proxmox backup host
+    - Media:
+        - Plex:
+            icon: plex.png
+            href: http://plex.smeyer.ca/
+            description: Media Viewer
+        - Sonarr:
+            icon: sonarr.png
+            href: https://tv.smeyer.ca/
+            description: Tv management
+        - Radarr:
+            icon: radarr.png
+            href: https://movies.smeyer.ca/
+            description: Movies management
+        - Lidarr:
+            icon: lidarr.png
+            href: https://music.smeyer.ca/
+            description: Music management
+        - Booklore:
+            icon: book-lore.png
+            href: http://read.smeyer.ca/
+            description: Book reader
+        - Transmission-vpn:
+            icon: transmission.png
+            href: https://transmission.smeyer.ca/
+            description: Downloader
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://index.smeyer.ca/
+            description: index management
+        - Immich:
+            icon: immich.png
+            href: https://pics.smeyer.ca/
+            description: photo curation
+
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - search:
+        provider: google
+        target: _blank
