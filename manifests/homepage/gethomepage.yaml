@@ -13,13 +13,16 @@ spec:
       valuesObject:
         image:
           repository: ghcr.io/gethomepage/homepage
-          tag: latest
 
         enableRbac: true
 
         serviceAccount:
           name: homepage
           create: true
+
+        env:
+          - name: HOMEPAGE_ALLOWED_HOSTS
+            value: "home.smeyer.ca"
 
         ingress:
           main:
@@ -35,11 +38,14 @@ spec:
         persistence:
           logs:
             enabled: true
-            storageClass: longhorn
-            size: 1Gi
+            type: emptyDir
+            mountPath: /app/config/logs
 
         config:
-          settings: |
+          kubernetes:
+            mode: cluster
+
+          settingsString: |
             backgroundOpacity: 0.6
             cardBlur: md
             headerStyle: underlined
@@ -63,11 +69,11 @@ spec:
                 style: row
                 icon: mdi-folder-multiple-image
               Host:
-                column: 5
+                columns: 5
                 style: row
                 icon: mdi-folder-multiple-image
 
-          bookmarks: |
+          bookmarks:
             - Proxmox:
                 - proxmox backup server install instructions:
                     - abbr: pb
@@ -120,7 +126,7 @@ spec:
                       icon: https://blog.coursiv.io/api/media/file/coursiv-logo.svg
                       href: https://coursiv.io/en
 
-          services: |
+          services:
             - Apps:
                 - HomeAssistant:
                     icon: home-assistant.png
@@ -242,7 +248,7 @@ spec:
                     href: https://pics.smeyer.ca/
                     description: photo curation
 
-          widgets: |
+          widgets:
             - kubernetes:
                 cluster:
                   show: true
@@ -258,9 +264,6 @@ spec:
             - search:
                 provider: google
                 target: _blank
-
-          kubernetes: |
-            mode: cluster
 
   destination:
     server: https://kubernetes.default.svc
