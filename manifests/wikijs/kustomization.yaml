@@ -3,6 +3,6 @@ kind: Kustomization
 namespace: wikijs
 resources:
   - configmap.yaml
-  - postgresql.yaml
+  - postgres.yaml
   - deployment.yaml
   - ingress.yaml
