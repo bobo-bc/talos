@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wikijs-postgresql
+  namespace: wikijs
+spec:
+  serviceName: wikijs-postgresql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikijs-postgresql
+  template:
+    metadata:
+      labels:
+        app: wikijs-postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: postgres:15
+          env:
+            - name: POSTGRES_DB
+              value: wikijs
+            - name: POSTGRES_USER
+              value: wikijs
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs-db-pass
+                  key: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 8Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikijs-postgresql
+  namespace: wikijs
+spec:
+  selector:
+    app: wikijs-postgresql
+  ports:
+    - port: 5432
+      targetPort: 5432
