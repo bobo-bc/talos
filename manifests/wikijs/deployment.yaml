@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikijs
+  namespace: wikijs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikijs
+  template:
+    metadata:
+      labels:
+        app: wikijs
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox
+          command: ['sh', '-c', 'until nc -z wikijs-postgresql 5432; do echo waiting for database; sleep 2; done']
+      containers:
+        - name: wikijs
+          image: ghcr.io/requarks/wiki:2.5
+          env:
+            - name: DB_TYPE
+              value: postgres
+            - name: DB_HOST
+              value: wikijs-postgresql
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: wikijs
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: wikijs-db-pass
+                  key: password
+            - name: DB_NAME
+              value: wikijs
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: config
+              mountPath: /wiki/config.yml
+              subPath: config.yml
+      volumes:
+        - name: config
+          configMap:
+            name: wikijs-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikijs
+  namespace: wikijs
+spec:
+  selector:
+    app: wikijs
+  ports:
+    - port: 80
+      targetPort: 3000
