@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+  namespace: ghost
+  labels:
+    app: ghost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost
+  template:
+    metadata:
+      labels:
+        app: ghost
+    spec:
+      containers:
+        - name: ghost
+          image: ghost:5
+          ports:
+            - containerPort: 2368
+          env:
+            - name: url
+              value: "https://ghost.smeyer.ca"
+            - name: database__client
+              value: "mysql"
+            - name: database__connection__host
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: database__connection__host
+            - name: database__connection__port
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: database__connection__port
+            - name: database__connection__database
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: database__connection__database
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: database__connection__user
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: database__connection__password
+            - name: mail__transport
+              value: "SMTP"
+            - name: mail__options__host
+              value: "smtp.mailgun.org"
+            - name: mail__options__port
+              value: "587"
+            - name: mail__options__secure
+              value: "false"
+            - name: mail__options__auth__user
+              value: "postmaster@mg.smeyer.ca"
+            - name: mail__options__auth__pass
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-secrets
+                  key: mailgun-password
+            - name: mail__from
+              value: "Ghost <no-reply@smeyer.ca>"
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /var/lib/ghost/content
+      volumes:
+        - name: ghost-content
+          persistentVolumeClaim:
+            claimName: ghost
