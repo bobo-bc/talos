@@ -44,7 +44,7 @@ spec:
         - name: FIREWALL_INPUT_PORTS
           value: "9091"
         - name: TRANSMISSION_WEB_UI
-          value: 'transmission-web-control"
+          value: "transmission-web-control"
         ports:
         - containerPort: 9091
           name: http-web
