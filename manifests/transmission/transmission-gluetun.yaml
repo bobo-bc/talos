@@ -45,6 +45,12 @@ spec:
           value: "9091"
         - name: TRANSMISSION_WEB_UI
           value: "transmission-web-control"
+        - name: DOWNLOAD_DIR
+          value: "/data/downloads"
+        - name: INCOMPLETE_DIR
+          value: "/data/downloads/incomplete"
+        - name: INCOMPLETE_DIR_ENABLED
+          value: "true"
         ports:
         - containerPort: 9091
           name: http-web
