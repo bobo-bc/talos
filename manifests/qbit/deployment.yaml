@@ -44,7 +44,7 @@ spec:
         - name: FIREWALL_OUTBOUND_SUBNETS
           value: "10.0.0.0/8"
         - name: FIREWALL_INPUT_PORTS
-          value: "8080"
+          value: "8080,80"
         ports:
         - containerPort: 8080
           name: http-web
