@@ -163,14 +163,11 @@ data:
             icon: npm.png
             href: https://proxy.smeyer.ca/
             description: proxy management
-        - Pulse Monitoring:
-            icon: pulse.png
-            href: https://monitor.smeyer.ca/
+        - Grafana:
+            icon: grafana.png
+            href: https://grafana.smeyer.ca/
             description: Monitoring
-        - Skooner:
-            icon: kubernetes.png
-            href: http://skooner.smeyer.ca/
-            description: Kubernetes Monitoring
+
         - Longhorn:
             icon: longhorn.png
             href: http://longhorn.smeyer.ca/
@@ -202,7 +199,7 @@ data:
             description: Music management
         - Booklore:
             icon: book-lore.png
-            href: http://read.smeyer.ca/
+            href: http://books.smeyer.ca/
             description: Book reader
         - Transmission-vpn:
             icon: transmission.png
