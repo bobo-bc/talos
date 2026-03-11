@@ -201,9 +201,9 @@ data:
             icon: book-lore.png
             href: http://books.smeyer.ca/
             description: Book reader
-        - Transmission-vpn:
-            icon: transmission.png
-            href: https://transmission.smeyer.ca/
+        - qBittorrent-vpn:
+            icon: qbittorrent.png
+            href: https://torrent.smeyer.ca/
             description: Downloader
         - Prowlarr:
             icon: prowlarr.png
