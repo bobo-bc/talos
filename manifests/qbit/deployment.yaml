@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent-vpn
+  namespace: media
+  labels:
+    app: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      containers:
+      # --- CONTAINER 1: GLUETUN (VPN) ---
+      - name: vpn
+        image: qmcgaw/gluetun:latest
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        env:
+        - name: VPN_SERVICE_PROVIDER
+          value: "nordvpn"
+        - name: VPN_TYPE
+          value: "openvpn"
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              name: vpn-auth
+              key: username
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vpn-auth
+              key: password
+        - name: SERVER_COUNTRIES
+          value: "Canada"
+        - name: FIREWALL_INBOUND_SUBNETS
+          value: "10.0.0.0/8"
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: "10.0.0.0/8"
+        - name: FIREWALL_INPUT_PORTS
+          value: "8080"
+        ports:
+        - containerPort: 8080
+          name: http-web
+        - containerPort: 6881
+          name: torrent-tcp
+        - containerPort: 6881
+          protocol: UDP
+          name: torrent-udp
+        volumeMounts:
+        - name: tun
+          mountPath: /dev/net/tun
+
+      # --- CONTAINER 2: QBITTORRENT ---
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Vancouver"
+        - name: WEBUI_PORT
+          value: "8080"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: downloads
+          mountPath: /data
+
+      volumes:
+      - name: tun
+        hostPath:
+          path: /dev/net/tun
+      - name: config
+        persistentVolumeClaim:
+          claimName: qbittorrent-config-pvc
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: nfs-media-pvc
