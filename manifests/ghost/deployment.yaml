@@ -23,6 +23,10 @@ spec:
           env:
             - name: url
               value: "https://ghost.smeyer.ca"
+            - name: server__host
+              value: "0.0.0.0"
+            - name: server__port
+              value: "2368"
             - name: database__client
               value: "mysql"
             - name: database__connection__host
