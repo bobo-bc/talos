@@ -159,10 +159,10 @@ data:
             icon: traefik.png
             href: https://traefik.smeyer.ca/dashboard/
             description: k3s reverse proxy
-        - Nginx Proxy Manager:
-            icon: npm.png
-            href: https://proxy.smeyer.ca/
-            description: proxy management
+        - Hubble:
+            icon: hubble.png
+            href: https://hubble.smeyer.ca/
+            description: cillium web ui
         - Grafana:
             icon: grafana.png
             href: https://grafana.smeyer.ca/
