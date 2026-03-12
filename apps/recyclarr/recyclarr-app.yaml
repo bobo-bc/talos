@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: recyclarr
+  namespace: argocd
+spec:
+  ignoreDifferences:
+  - group: ""
+    kind: Secret
+    name: recyclarr-api-keys
+    jsonPointers:
+      - /data
+  source:
+    repoURL: https://github.com/yourusername/homelab-cluster
+    targetRevision: HEAD
+    path: apps/recyclarr
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: recyclarr
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
