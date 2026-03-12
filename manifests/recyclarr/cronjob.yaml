@@ -1,0 +1,53 @@
+# cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: recyclarr
+  namespace: recyclarr
+spec:
+  schedule: "0 3 * * *"  # nightly at 3am
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+          - name: copy-config
+            image: busybox
+            command:
+              - sh
+              - -c
+              - cp /configmap/recyclarr.yml /config/recyclarr.yml
+            volumeMounts:
+            - name: configmap
+              mountPath: /configmap
+            - name: config
+              mountPath: /config
+          containers:
+          - name: recyclarr
+            image: ghcr.io/recyclarr/recyclarr:latest
+            args: ["sync"]
+            env:
+            - name: SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: recyclarr-api-keys
+                  key: SONARR_API_KEY
+            - name: RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: recyclarr-api-keys
+                  key: RADARR_API_KEY
+            volumeMounts:
+            - name: config
+              mountPath: /config
+          volumes:
+          - name: configmap
+            configMap:
+              name: recyclarr-config
+          - name: config
+            persistentVolumeClaim:
+              claimName: recyclarr-config
