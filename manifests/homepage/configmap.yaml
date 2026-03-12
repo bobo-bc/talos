@@ -160,7 +160,7 @@ data:
             href: https://traefik.smeyer.ca/dashboard/
             description: k3s reverse proxy
         - Hubble:
-            icon: hubble.png
+            icon: cillium-light.png
             href: https://hubble.smeyer.ca/
             description: cillium web ui
         - Grafana:
