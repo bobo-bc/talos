@@ -4,16 +4,11 @@ metadata:
   name: recyclarr
   namespace: argocd
 spec:
-  ignoreDifferences:
-  - group: ""
-    kind: Secret
-    name: recyclarr-api-keys
-    jsonPointers:
-      - /data
+  project: default
   source:
-    repoURL: https://github.com/yourusername/homelab-cluster
+    repoURL: https://github.com/bobo-bc/talos.git # Point to your own repo
     targetRevision: HEAD
-    path: apps/recyclarr
+    path: manifests/recyclarr # Point to the folder where you'll put the YAML below
   destination:
     server: https://kubernetes.default.svc
     namespace: recyclarr
@@ -21,6 +16,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
