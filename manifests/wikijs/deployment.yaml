@@ -42,10 +42,16 @@ spec:
             - name: config
               mountPath: /wiki/config.yml
               subPath: config.yml
+            - name: wiki-assets
+              mountPath: /wiki-assets
       volumes:
         - name: config
           configMap:
             name: wikijs-config
+          - name: wiki-assets
+        nfs:
+          server: 10.0.0.5
+          path: /mnt/data/wiki-assets
 ---
 apiVersion: v1
 kind: Service
