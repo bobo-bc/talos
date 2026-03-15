@@ -1,9 +1,0 @@
-# Add to wikijs deployment in Git
-volumeMounts:
-  - name: wiki-assets
-    mountPath: /wiki-assets
-volumes:
-  - name: wiki-assets
-    nfs:
-      server: 10.0.0.5
-      path: /mnt/data/wiki-assets
