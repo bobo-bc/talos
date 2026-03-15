@@ -75,3 +75,31 @@ spec:
       targetPort: 8000
   selector:
     app: pdfding
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdfding-data-pvc
+  namespace: pdfding
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pdfding-db-pvc
+  namespace: pdfding
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn
