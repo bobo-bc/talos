@@ -25,3 +25,17 @@ spec:
       storage: 10Gi
   storageClassName: longhorn
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-photos
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-static
+  nfs:
+    server: 10.0.0.5
+    path: /mnt/data/media/photos
