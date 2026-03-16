@@ -126,22 +126,22 @@ spec:
       port: 6060
       targetPort: 6060
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
-  name: booklore-ingress
+  name: booklore
   namespace: media
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
-  rules:
-  - host: books.smeyer.ca
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`books.smeyer.ca`)
+    kind: Rule
+    services:
+    - name: booklore
+      port: 6060
+  tls:
+    certResolver: letsencrypt
             name: booklore
             port:
               number: 6060
