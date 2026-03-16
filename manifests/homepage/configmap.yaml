@@ -118,10 +118,10 @@ data:
             icon: draw-io.png
             href: https://drawio.smeyer.ca/
             description: Drawing tool
-        - Compose Tool Box:
-            icon: docker-moby.png
-            href: https://compose.smeyer.ca/
-            description: compose file review tool
+        - Pulse Monitoring:
+            icon: pulse.png
+            href: http://10.0.0.11:7655
+            description: Pulse Monitoring
         - IT-Tool:
             icon: it-tools.png
             href: http://tools.smeyer.ca/
