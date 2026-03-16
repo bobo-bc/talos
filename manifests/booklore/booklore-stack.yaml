@@ -106,7 +106,7 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: booklore/booklore:v2.2.1
+        image: ghcr.io/booklore-app/booklore:latest
         env:
         - name: BOOKLORE_PORT
           value: "6060"
