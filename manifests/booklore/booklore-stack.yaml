@@ -140,8 +140,3 @@ spec:
     services:
     - name: booklore
       port: 6060
-  tls:
-    certResolver: letsencrypt
-            name: booklore
-            port:
-              number: 6060
