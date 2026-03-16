@@ -1,4 +1,3 @@
-# --- MariaDB Database (StatefulSet) ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -17,20 +16,24 @@ spec:
     spec:
       containers:
       - name: mariadb
-        image: mariadb:11.2
+        image: lscr.io/linuxserver/mariadb:11.4.5
         env:
-        - name: MARIADB_ROOT_PASSWORD
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Vancouver"
+        - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
               key: root-password
-        - name: MARIADB_ROOT_HOST
-          value: "%"
-        - name: MARIADB_DATABASE
+        - name: MYSQL_DATABASE
           value: "booklore"
-        - name: MARIADB_USER
-          value: "booklore" # Matched to your Docker export
-        - name: MARIADB_PASSWORD
+        - name: MYSQL_USER
+          value: "booklore"
+        - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
@@ -38,9 +41,31 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
+        livenessProbe:
+          exec:
+            command:
+            - mariadb-admin
+            - ping
+            - -h
+            - localhost
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - mariadb-admin
+            - ping
+            - -h
+            - localhost
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         volumeMounts:
         - name: mysql-data
-          mountPath: /var/lib/mysql
+          mountPath: /config
   volumeClaimTemplates:
   - metadata:
       name: mysql-data
