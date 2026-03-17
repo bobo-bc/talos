@@ -106,37 +106,29 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: booklore/booklore:latest
-        env:
-        - name: USER_ID
-          value: "1000"
-        - name: GROUP_ID
-          value: "1000"
-        - name: TZ
-          value: "America/Vancouver"
-        - name: BOOKLORE_PORT
-          value: "6060"
-        - name: DISK_TYPE
-          value: "NETWORK"
-        - name: DATABASE_URL
-          value: "jdbc:mariadb://mariadb:3306/booklore?useSSL=false&allowPublicKeyRetrieval=true"
-        - name: DATABASE_USERNAME
-          value: "booklore"
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-creds
-              key: booklore_pass
-        volumeMounts:
-        - name: nfs-storage
-          mountPath: /app/data
-          subPath: images/booklore/data
-        - name: nfs-storage
-          mountPath: /bookdrop
-          subPath: media/bookdrop
-        - name: nfs-storage
-          mountPath: /books
-          subPath: media/books
+    image: ghcr.io/adityachandelgit/booklore-app:latest
+  env:
+  - name: APP_USER_ID
+    value: "1000"
+  - name: APP_GROUP_ID
+    value: "1000"
+  - name: TZ
+    value: "America/Vancouver"
+  - name: BOOKLORE_PORT
+    value: "6060"
+  - name: DISK_TYPE
+    value: "NETWORK"
+  - name: DATABASE_URL
+    value: "jdbc:mariadb://mariadb:3306/booklore?useSSL=false&allowPublicKeyRetrieval=true"
+  - name: DATABASE_USERNAME
+    value: "booklore"
+  - name: DATABASE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mariadb-creds
+        key: booklore_pass
+  - name: SWAGGER_ENABLED
+    value: "false"
       volumes:
       - name: nfs-storage
         persistentVolumeClaim:
