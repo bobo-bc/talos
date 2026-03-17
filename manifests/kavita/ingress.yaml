@@ -17,7 +17,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`read.smeyer.ca`)
+    - match: Host(`books.smeyer.ca`)
       kind: Rule
       services:
         - name: kavita
