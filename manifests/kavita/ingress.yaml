@@ -2,7 +2,7 @@ apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: kavita-redirect-https
-  namespace: kavita
+  namespace: media
 spec:
   redirectScheme:
     scheme: https
@@ -12,7 +12,7 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: kavita
-  namespace: kavita
+  namespace: media
 spec:
   entryPoints:
     - websecure
@@ -29,12 +29,12 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: kavita-http
-  namespace: kavita
+  namespace: media
 spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`read.smeyer.ca`)
+    - match: Host(`books.smeyer.ca`)
       kind: Rule
       middlewares:
         - name: kavita-redirect-https
