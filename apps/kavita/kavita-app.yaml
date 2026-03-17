@@ -11,7 +11,7 @@ spec:
     path: manifests/kavita
   destination:
     server: https://kubernetes.default.svc
-    namespace: kavita
+    namespace: media
   syncPolicy:
     automated:
       prune: true
