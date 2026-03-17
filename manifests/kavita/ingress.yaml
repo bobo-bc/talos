@@ -1,0 +1,43 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: kavita-redirect-https
+  namespace: kavita
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kavita
+  namespace: kavita
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`read.smeyer.ca`)
+      kind: Rule
+      services:
+        - name: kavita
+          port: 80
+  tls:
+    certResolver: letsencrypt
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kavita-http
+  namespace: kavita
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`read.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: kavita-redirect-https
+      services:
+        - name: kavita
+          port: 80
