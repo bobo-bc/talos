@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kavita
-  namespace: kavita
+  namespace: media
   labels:
     app: kavita
 spec:
