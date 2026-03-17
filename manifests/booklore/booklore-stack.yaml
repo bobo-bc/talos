@@ -106,22 +106,27 @@ spec:
     spec:
       containers:
       - name: booklore
-        image: ghcr.io/booklore-app/booklore:latest
+        image: booklore/booklore:latest
         env:
+        - name: USER_ID
+          value: "1000"
+        - name: GROUP_ID
+          value: "1000"
+        - name: TZ
+          value: "America/Vancouver"
         - name: BOOKLORE_PORT
           value: "6060"
+        - name: DISK_TYPE
+          value: "NETWORK"
+        - name: DATABASE_URL
+          value: "jdbc:mariadb://mariadb:3306/booklore?useSSL=false&allowPublicKeyRetrieval=true"
         - name: DATABASE_USERNAME
-          value: "booklore" # Matched to your Docker export
+          value: "booklore"
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mariadb-creds
               key: booklore_pass
-        # Critical JDBC string pointing to internal K8s Service
-        - name: DATABASE_URL
-          value: "jdbc:mariadb://mariadb:3306/booklore?useSSL=false&allowPublicKeyRetrieval=true"
-        - name: TZ
-          value: "Etc/UTC"
         volumeMounts:
         - name: nfs-storage
           mountPath: /app/data
