@@ -32,6 +32,7 @@ spec:
               mountPath: /kavita/config
             - name: books
               mountPath: /books
+              subPath: media/books
       volumes:
         - name: config
           persistentVolumeClaim:
