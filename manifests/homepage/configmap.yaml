@@ -197,8 +197,8 @@ data:
             icon: lidarr.png
             href: https://music.smeyer.ca/
             description: Music management
-        - Booklore:
-            icon: book-lore.png
+        - Kavita:
+            icon: kavita.png
             href: http://books.smeyer.ca/
             description: Book reader
         - qBittorrent-vpn:
