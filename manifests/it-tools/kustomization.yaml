@@ -6,3 +6,4 @@ namespace: it-tools
 resources:
   - it-tools.yaml
   - ingress.yaml
+  - service.yaml
