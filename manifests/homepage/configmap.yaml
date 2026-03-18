@@ -124,7 +124,7 @@ data:
             description: Pulse Monitoring
         - IT-Tool:
             icon: it-tools.png
-            href: http://tools.smeyer.ca/
+            href: https://tools.smeyer.ca/
             description: toolbox of goodness
         - PDFding:
             icon: pdfding-light.png
@@ -132,7 +132,7 @@ data:
             description: pdf editing tool
         - Adminer:
             icon: adminer.png
-            href: http://db.smeyer.ca/
+            href: https://db.smeyer.ca/
             description: database management interface
         - Giftful:
             icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
@@ -170,11 +170,11 @@ data:
 
         - Longhorn:
             icon: longhorn.png
-            href: http://longhorn.smeyer.ca/
+            href: https://longhorn.smeyer.ca/
             description: storage
         - Uptime Kuma:
             icon: uptime-kuma.png
-            href: http://uptime.smeyer.ca
+            href: https://uptime.smeyer.ca
             description: uptime tracking
         - Proxmox Backup Server:
             icon: proxmox-light.png
@@ -183,7 +183,7 @@ data:
     - Media:
         - Plex:
             icon: plex.png
-            href: http://plex.smeyer.ca/
+            href: https://plex.smeyer.ca/
             description: Media Viewer
         - Sonarr:
             icon: sonarr.png
@@ -199,7 +199,7 @@ data:
             description: Music management
         - Kavita:
             icon: kavita.png
-            href: http://books.smeyer.ca/
+            href: https://books.smeyer.ca/
             description: Book reader
         - qBittorrent-vpn:
             icon: qbittorrent.png
