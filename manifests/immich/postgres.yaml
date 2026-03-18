@@ -15,15 +15,17 @@ spec:
         app: immich-postgresql
     spec:
       securityContext:
-        # Standard Postgres UID is 999 or 1001 depending on the image
-        # This ensures the pod can write to the disk
-        fsGroup: 999 
+        fsGroup: 999
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: postgres
-          image: tensorchord/pgvecto-rs:pg14-v0.2.0
+          # Updated from tensorchord/pgvecto-rs to immich's postgres image with VectorChord.
+          # This image includes pgvecto.rs + pgvector + VectorChord, allowing migration from existing data.
+          # After migration completes you can optionally switch to the leaner image:
+          # ghcr.io/immich-app/postgres:14-vectorchord0.4.3 (no pgvecto.rs)
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -36,7 +38,6 @@ spec:
               value: "postgres"
             - name: POSTGRES_DB
               value: "immich"
-            # Mapping both names so both the container and Immich are happy
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -47,12 +48,23 @@ spec:
                 secretKeyRef:
                   name: immich-db-secret
                   key: DB_PASSWORD
+            # Uncomment if your Longhorn volume is backed by HDDs rather than SSDs
+            # - name: DB_STORAGE_TYPE
+            #   value: "HDD"
           ports:
             - containerPort: 5432
+          # Equivalent of Docker's shm_size: 128mb — required by the new image
           volumeMounts:
             - name: pgdata
               mountPath: /var/lib/postgresql/data
               subPath: pgdata
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
   volumeClaimTemplates:
     - metadata:
         name: pgdata
@@ -66,7 +78,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: immich-postgresql # This is the "phone number" the server will call
+  name: immich-postgresql
   namespace: immich
 spec:
   selector:
