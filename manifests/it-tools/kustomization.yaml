@@ -4,6 +4,6 @@ kind: Kustomization
 namespace: it-tools
 
 resources:
-  - it-tools.yaml
+  - deployment.yaml
   - ingress.yaml
   - service.yaml
