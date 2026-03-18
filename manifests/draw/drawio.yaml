@@ -22,15 +22,3 @@ spec:
             # This helps Traefik know how to build URLs inside the app
             - name: DRAWIO_SERVER_URL
               value: "https://drawio.smeyer.ca"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: drawio
-  namespace: drawio
-spec:
-  ports:
-    - port: 80
-      targetPort: 8080
-  selector:
-    app: drawio
