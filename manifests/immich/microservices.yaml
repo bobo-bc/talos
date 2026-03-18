@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: immich-microservices
-          image: ghcr.io/immich-app/immich-microservices:latest
+          image: ghcr.io/immich-app/immich-microservices:v2.5
           env:
             - name: DB_URL
               valueFrom:
