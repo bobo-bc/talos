@@ -6,3 +6,4 @@ namespace: drawio
 resources:
   - drawio.yaml
   - ingress.yaml
+  - service.yaml
