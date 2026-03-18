@@ -37,4 +37,3 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: nfs-media-pvc # Your existing bound PVC!
-      storage: 2Gi
