@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: immich-server
-          image: ghcr.io/immich-app/immich-server:latest # Using a stable tag
+          image: ghcr.io/immich-app/immich-server:2.5 # Using a stable tag
           ports:
             - containerPort: 3001
           env:
