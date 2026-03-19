@@ -34,7 +34,7 @@ data:
         columns: 5
         style: row
         icon: mdi-folder-multiple-image
-      Media aquisition:
+      Media Aquisition:
         columns: 5
         style: row
         icon: mdi-folder-multiple-image
@@ -49,11 +49,12 @@ data:
       Monitoring:
         columns: 3
         style: row
-        icon: mdi-folder-multiple-image 
-      Databases
+        icon: mdi-folder-multiple-image
+      Databases:
         columns: 1
         style: row
-        icon: mdi-folder-multiple-image 
+        icon: mdi-folder-multiple-image
+
   bookmarks.yaml: |
     - Proxmox:
         - proxmox backup server install instructions:
@@ -113,7 +114,7 @@ data:
             icon: home-assistant.png
             href: http://10.0.2.4:8123/
             description: home automation
-          - Plex:
+        - Plex:
             icon: plex.png
             href: https://plex.smeyer.ca/
             description: Media Viewer
@@ -125,15 +126,15 @@ data:
             icon: immich.png
             href: https://pics.smeyer.ca/
             description: photo curation
-       - Giftful:
+        - Giftful:
             icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
             href: https://giftful.com/stevenmeyer2
             description: gift registry of things that I covet
-   - Productivity:
+    - Productivity:
         - Wikijs:
             icon: wikijs.png
             href: https://wiki.smeyer.ca/
-            description: notes curation            
+            description: notes curation
         - GitHub Blog:
             icon: github-light.png
             href: https://smeyer.ca/
@@ -175,8 +176,8 @@ data:
             icon: prowlarr.png
             href: https://index.smeyer.ca/
             description: index management
-    - Infrastructure: 
-         - Proxmox:
+    - Infrastructure:
+        - Proxmox:
             icon: proxmox.png
             href: https://pve.smeyer.ca/
             description: proxmox host
@@ -188,11 +189,11 @@ data:
             icon: longhorn.png
             href: https://longhorn.smeyer.ca/
             description: storage
-         - Portainer:
+        - Portainer:
             icon: portainer-alt.png
             href: https://portainer.smeyer.ca/
             description: k3s/docker management
-         - Argo-CD:
+        - Argo-CD:
             icon: argo-cd.png
             href: https://argo.smeyer.ca/
             description: App deployment
@@ -209,7 +210,7 @@ data:
             icon: cilium-light.png
             href: https://hubble.smeyer.ca/
             description: cillium web ui
-    - Monitoring:   
+    - Monitoring:
         - Grafana:
             icon: grafana.png
             href: https://grafana.smeyer.ca/
@@ -221,8 +222,8 @@ data:
         - Pulse Monitoring:
             icon: pulse.png
             href: http://10.0.0.11:7655
-            description: Pulse Monitoring    
-    - Databases:     
+            description: Pulse Monitoring
+    - Databases:
         - Adminer:
             icon: adminer.png
             href: https://db.smeyer.ca/
