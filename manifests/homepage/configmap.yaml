@@ -96,7 +96,7 @@ data:
             - abbr: CF
               icon: cloudflare.png
               href: https://dash.cloudflare.com/login
-   - Kubernetes and Containers:
+    - Kubernetes and Containers:
         - Talos on Kubernetes:
             - abbr: TK
               icon: https://www.talos.dev/favicon.ico
