@@ -56,15 +56,6 @@ data:
         icon: mdi-folder-multiple-image
 
   bookmarks.yaml: |
-    - Domain and DNS:
-        - Webnames.ca:
-            - abbr: WN
-              icon: https://www.webnames.ca/favicon.ico
-              href: https://www.webnames.ca
-        - Cloudflare:
-            - abbr: CF
-              icon: cloudflare.png
-              href: https://dash.cloudflare.com/login
     - Proxmox:
         - Proxmox Helper Scripts:
             - abbr: PH
@@ -91,7 +82,7 @@ data:
             - abbr: DH
               icon: docker.png
               href: https://petersem.github.io/dockerholics/
-    - Reference and Learning:
+    - Reference:
         - Pimylifeup:
             - abbr: PL
               icon: https://pimylifeup.com/wp-content/uploads/2021/02/pimylifeup-square-logo.png
@@ -109,7 +100,15 @@ data:
             - abbr: DI
               icon: homepage.png
               href: https://github.com/homarr-labs/dashboard-icons/tree/main/svg
-
+    - Domain and DNS:
+        - Webnames.ca:
+            - abbr: WN
+              icon: https://www.webnames.ca/favicon.ico
+              href: https://www.webnames.ca
+        - Cloudflare:
+            - abbr: CF
+              icon: cloudflare.png
+              href: https://dash.cloudflare.com/login
   services.yaml: |
     - Home and Media:
         - HomeAssistant:
