@@ -118,14 +118,14 @@ data:
             icon: plex.png
             href: https://plex.smeyer.ca/
             description: Media Viewer
-        - Kavita:
-            icon: kavita.png
-            href: https://books.smeyer.ca/
-            description: Book reader
         - Immich:
             icon: immich.png
             href: https://pics.smeyer.ca/
             description: photo curation
+        - Kavita:
+            icon: kavita.png
+            href: https://books.smeyer.ca/
+            description: Book reader
         - Giftful:
             icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
             href: https://giftful.com/stevenmeyer2
@@ -135,10 +135,7 @@ data:
             icon: wikijs.png
             href: https://wiki.smeyer.ca/
             description: notes curation
-        - GitHub Blog:
-            icon: github-light.png
-            href: https://smeyer.ca/
-            description: my blog
+
         - Ghost:
             icon: ghost-light.png
             href: https://ghost.smeyer.ca/
@@ -147,19 +144,28 @@ data:
             icon: draw-io.png
             href: https://drawio.smeyer.ca/
             description: Drawing tool
-        - IT-Tool:
-            icon: it-tools.png
-            href: https://tools.smeyer.ca/
-            description: toolbox of goodness
+        - GitHub Blog:
+            icon: github-light.png
+            href: https://smeyer.ca/
+            description: my blog
+
         - PDFding:
             icon: pdfding-light.png
             href: https://pdf.smeyer.ca/
             description: pdf editing tool
+        - IT-Tool:
+            icon: it-tools.png
+            href: https://tools.smeyer.ca/
+            description: toolbox of goodness
     - Media Aquisition:
         - qBittorrent-vpn:
             icon: qbittorrent.png
             href: https://torrent.smeyer.ca/
             description: Downloader
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://index.smeyer.ca/
+            description: index management
         - Sonarr:
             icon: sonarr.png
             href: https://tv.smeyer.ca/
@@ -172,10 +178,7 @@ data:
             icon: lidarr.png
             href: https://music.smeyer.ca/
             description: Music management
-        - Prowlarr:
-            icon: prowlarr.png
-            href: https://index.smeyer.ca/
-            description: index management
+
     - Infrastructure:
         - Proxmox:
             icon: proxmox.png
