@@ -67,7 +67,7 @@ data:
               href: https://4sysops.com/archives/proxmox-backup-server-install-and-configure/
         - Dietpi Proxmox Installer:
             - abbr: DP
-              icon: https://e7.pngegg.com/pngimages/558/768/png-clipart-logo-debian-gnu-linux-computer-icons-linux.png
+              icon: https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fdietpi.com%2Fdietpi-software.html&ved=0CBYQjRxqFwoTCOiIq4GGrZMDFQAAAAAdAAAAABAI&opi=89978449
               href: https://github.com/dazeb/proxmox-dietpi-installer
     - Kubernetes and Containers:
         - Talos on Kubernetes:
