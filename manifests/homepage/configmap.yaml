@@ -19,7 +19,7 @@ data:
     backgroundOpacity: 0.6
     cardBlur: md
     headerStyle: underlined
-    background: https://unsplash.com/photos/red-pagoda-nestled-beside-a-misty-waterfall-in-autumn-6h6O17NjZ_Iauto=format&fit=crop&w=2560&q=80
+    background: https://unsplash.com/photos/red-pagoda-nestled-beside-a-misty-waterfall-in-autumn-6h6O17NjZ_I?auto=format&fit=crop&w=2560&q=80
     title: Bobo Homepage
     statusStyle: "dot"
     hideVersion: false
@@ -55,60 +55,60 @@ data:
         style: row
         icon: mdi-folder-multiple-image
 
-bookmarks.yaml: |
-  - Domain and DNS:
-      - Webnames.ca:
-          - abbr: WN
-            icon: https://www.webnames.ca/favicon.ico
-            href: https://www.webnames.ca
-      - Cloudflare:
-          - abbr: CF
-            icon: cloudflare.png
-            href: https://dash.cloudflare.com/login
-  - Proxmox:
-      - Proxmox Helper Scripts:
-          - abbr: PH
-            icon: proxmox.png
-            href: https://community-scripts.org
-      - Proxmox Backup Server Instructions:
-          - abbr: PB
-            icon: proxmox-light.png
-            href: https://4sysops.com/archives/proxmox-backup-server-install-and-configure/
-      - Dietpi Proxmox Installer:
-          - abbr: DP
-            icon: https://e7.pngegg.com/pngimages/558/768/png-clipart-logo-debian-gnu-linux-computer-icons-linux.png
-            href: https://github.com/dazeb/proxmox-dietpi-installer
-  - Kubernetes and Containers:
-      - Talos on Kubernetes:
-          - abbr: TK
-            icon: https://www.talos.dev/favicon.ico
-            href: https://secsys.pages.dev/posts/talos/
-      - Docker Swarm:
-          - abbr: DS
-            icon: docker-moby.png
-            href: https://rpi4cluster.com/docker-swarm-intro/
-      - Dockerholics:
-          - abbr: DH
-            icon: docker.png
-            href: https://petersem.github.io/dockerholics/
-  - Reference and Learning:
-      - Pimylifeup:
-          - abbr: PL
-            icon: https://pimylifeup.com/wp-content/uploads/2021/02/pimylifeup-square-logo.png
-            href: https://pimylifeup.com
-      - GitHub:
-          - abbr: GH
-            icon: github-light.png
-            href: https://github.com/bobo-bc/
-  - Design and Icons:
-      - Material Design Pictogramer:
-          - abbr: MD
-            icon: https://pictogrammers.com/favicon.ico
-            href: https://pictogrammers.com/library/mdi/
-      - Dashboard Icons:
-          - abbr: DI
-            icon: homepage.png
-            href: https://github.com/homarr-labs/dashboard-icons/tree/main/svg
+  bookmarks.yaml: |
+    - Domain and DNS:
+        - Webnames.ca:
+            - abbr: WN
+              icon: https://www.webnames.ca/favicon.ico
+              href: https://www.webnames.ca
+        - Cloudflare:
+            - abbr: CF
+              icon: cloudflare.png
+              href: https://dash.cloudflare.com/login
+    - Proxmox:
+        - Proxmox Helper Scripts:
+            - abbr: PH
+              icon: proxmox.png
+              href: https://community-scripts.org
+        - Proxmox Backup Server Instructions:
+            - abbr: PB
+              icon: proxmox-light.png
+              href: https://4sysops.com/archives/proxmox-backup-server-install-and-configure/
+        - Dietpi Proxmox Installer:
+            - abbr: DP
+              icon: https://e7.pngegg.com/pngimages/558/768/png-clipart-logo-debian-gnu-linux-computer-icons-linux.png
+              href: https://github.com/dazeb/proxmox-dietpi-installer
+    - Kubernetes and Containers:
+        - Talos on Kubernetes:
+            - abbr: TK
+              icon: https://www.talos.dev/favicon.ico
+              href: https://secsys.pages.dev/posts/talos/
+        - Docker Swarm:
+            - abbr: DS
+              icon: docker-moby.png
+              href: https://rpi4cluster.com/docker-swarm-intro/
+        - Dockerholics:
+            - abbr: DH
+              icon: docker.png
+              href: https://petersem.github.io/dockerholics/
+    - Reference and Learning:
+        - Pimylifeup:
+            - abbr: PL
+              icon: https://pimylifeup.com/wp-content/uploads/2021/02/pimylifeup-square-logo.png
+              href: https://pimylifeup.com
+        - GitHub:
+            - abbr: GH
+              icon: github-light.png
+              href: https://github.com/bobo-bc/
+    - Design and Icons:
+        - Material Design Pictogramer:
+            - abbr: MD
+              icon: https://pictogrammers.com/favicon.ico
+              href: https://pictogrammers.com/library/mdi/
+        - Dashboard Icons:
+            - abbr: DI
+              icon: homepage.png
+              href: https://github.com/homarr-labs/dashboard-icons/tree/main/svg
 
   services.yaml: |
     - Home and Media:
@@ -137,7 +137,6 @@ bookmarks.yaml: |
             icon: wikijs.png
             href: https://wiki.smeyer.ca/
             description: notes curation
-
         - Ghost:
             icon: ghost-light.png
             href: https://ghost.smeyer.ca/
@@ -150,7 +149,6 @@ bookmarks.yaml: |
             icon: github-light.png
             href: https://smeyer.ca/
             description: my blog
-
         - PDFding:
             icon: pdfding-light.png
             href: https://pdf.smeyer.ca/
@@ -180,7 +178,6 @@ bookmarks.yaml: |
             icon: lidarr.png
             href: https://music.smeyer.ca/
             description: Music management
-
     - Infrastructure:
         - Proxmox:
             icon: proxmox.png
@@ -247,4 +244,6 @@ bookmarks.yaml: |
           cpu: true
           memory: true
           showLabel: true
-
+    - search:
+        provider: google
+        target: _blank
