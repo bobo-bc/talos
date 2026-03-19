@@ -27,7 +27,7 @@ data:
     useEqualHeights: true
     layout:
       Home and Media:
-        columns: 4
+        columns: 5
         style: row
         icon: mdi-folder-multiple-image
       Productivity:
