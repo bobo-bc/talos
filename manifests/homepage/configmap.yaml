@@ -19,7 +19,7 @@ data:
     backgroundOpacity: 0.6
     cardBlur: md
     headerStyle: underlined
-    background: https://unsplash.com/photos/red-pagoda-nestled-beside-a-misty-waterfall-in-autumn-6h6O17NjZ_I?auto=format&fit=crop&w=2560&q=80
+    background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
     title: Bobo Homepage
     statusStyle: "dot"
     hideVersion: false
