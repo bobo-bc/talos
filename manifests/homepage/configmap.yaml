@@ -67,21 +67,8 @@ data:
               href: https://4sysops.com/archives/proxmox-backup-server-install-and-configure/
         - Dietpi Proxmox Installer:
             - abbr: DP
-              icon: https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fdietpi.com%2Fdietpi-software.html&ved=0CBYQjRxqFwoTCOiIq4GGrZMDFQAAAAAdAAAAABAI&opi=89978449
+              icon: https://images.icon-icons.com/195/PNG/256/OS_Linux_23399.png
               href: https://github.com/dazeb/proxmox-dietpi-installer
-    - Kubernetes and Containers:
-        - Talos on Kubernetes:
-            - abbr: TK
-              icon: https://www.talos.dev/favicon.ico
-              href: https://secsys.pages.dev/posts/talos/
-        - Docker Swarm:
-            - abbr: DS
-              icon: docker-moby.png
-              href: https://rpi4cluster.com/docker-swarm-intro/
-        - Dockerholics:
-            - abbr: DH
-              icon: docker.png
-              href: https://petersem.github.io/dockerholics/
     - Reference:
         - Pimylifeup:
             - abbr: PL
@@ -109,6 +96,19 @@ data:
             - abbr: CF
               icon: cloudflare.png
               href: https://dash.cloudflare.com/login
+      - Kubernetes and Containers:
+        - Talos on Kubernetes:
+            - abbr: TK
+              icon: https://www.talos.dev/favicon.ico
+              href: https://secsys.pages.dev/posts/talos/
+        - Docker Swarm:
+            - abbr: DS
+              icon: docker-moby.png
+              href: https://rpi4cluster.com/docker-swarm-intro/
+        - Dockerholics:
+            - abbr: DH
+              icon: docker.png
+              href: https://petersem.github.io/dockerholics/
   services.yaml: |
     - Home and Media:
         - HomeAssistant:
