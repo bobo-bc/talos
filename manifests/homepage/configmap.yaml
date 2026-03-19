@@ -31,7 +31,7 @@ data:
         style: row
         icon: mdi-folder-multiple-image
       Productivity:
-        columns: 5
+        columns: 3
         style: row
         icon: mdi-folder-multiple-image
       Media Aquisition:
