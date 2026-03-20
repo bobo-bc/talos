@@ -1,3 +1,7 @@
+---
+# Ghost CMS Deployment using SREDevOps hardened distroless image
+# Runs as non-root UID/GID 65532 (nonroot user in distroless)
+# InitContainer sets up content directories and permissions before Ghost starts
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,71 +14,100 @@ spec:
   selector:
     matchLabels:
       app: ghost
+  strategy:
+    type: Recreate  # Required with ReadWriteOnce PVC - only one pod can mount at a time
   template:
     metadata:
       labels:
         app: ghost
     spec:
-      containers:
-        - name: ghost
-          image: ghost:5
-          ports:
-            - containerPort: 2368
-          env:
-            - name: url
-              value: "https://ghost.smeyer.ca"
-            - name: server__host
-              value: "0.0.0.0"
-            - name: server__port
-              value: "2368"
-            - name: database__client
-              value: "mysql"
-            - name: database__connection__host
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: database__connection__host
-            - name: database__connection__port
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: database__connection__port
-            - name: database__connection__database
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: database__connection__database
-            - name: database__connection__user
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: database__connection__user
-            - name: database__connection__password
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: database__connection__password
-            - name: mail__transport
-              value: "SMTP"
-            - name: mail__options__host
-              value: "smtp.mailgun.org"
-            - name: mail__options__port
-              value: "587"
-            - name: mail__options__secure
-              value: "false"
-            - name: mail__options__auth__user
-              value: "postmaster@mg.smeyer.ca"
-            - name: mail__options__auth__pass
-              valueFrom:
-                secretKeyRef:
-                  name: ghost-secrets
-                  key: mailgun-password
-            - name: mail__from
-              value: "Ghost <no-reply@smeyer.ca>"
+      securityContext:
+        fsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        # Creates required Ghost content subdirectories and sets correct ownership
+        # Must run before the distroless main container since distroless has no shell
+        - name: ghost-init
+          image: busybox:1.36
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              GHOST_CONTENT=/var/lib/ghost/content
+              for dir in apps data files images logs media public themes; do
+                mkdir -pv $GHOST_CONTENT/$dir || echo "Error creating $GHOST_CONTENT/$dir"
+                chown -Rfv 65532:65532 $GHOST_CONTENT/$dir && echo "chown ok on $dir" || echo "Error on $GHOST_CONTENT/$dir"
+              done
+              echo "Ghost init complete"
           volumeMounts:
             - name: ghost-content
               mountPath: /var/lib/ghost/content
+      containers:
+        - name: ghost
+          # SREDevOps hardened distroless Ghost image - check for latest tag at:
+          # https://github.com/sredevopsorg/ghost-on-kubernetes/pkgs/container/ghost-on-kubernetes
+          image: ghcr.io/sredevopsorg/ghost-on-kubernetes:main
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65532
+            runAsGroup: 65532
+            readOnlyRootFilesystem: false
+          env:
+            - name: NODE_ENV
+              value: production
+          ports:
+            - containerPort: 2368
+              name: http
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /var/lib/ghost/content
+            - name: ghost-config
+              mountPath: /var/lib/ghost/config.production.json
+              subPath: config.production.json
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /ghost/api/v4/admin/site/
+              port: 2368
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /ghost/api/v4/admin/site/
+              port: 2368
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 500m
       volumes:
         - name: ghost-content
           persistentVolumeClaim:
+            claimName: ghost-content-pvc
+        - name: ghost-config
+          secret:
+            secretName: ghost-config-secret
+            items:
+              - key: config.production.json
+                path: config.production.json
+
             claimName: ghost
