@@ -222,7 +222,7 @@ data:
             description: uptime tracking
         - Pulse Monitoring:
             icon: pulse.png
-            href: http://10.0.0.11:7655
+            href: https://pulse.smeyer.ca
             description: Pulse Monitoring
     - Databases:
         - Adminer:
