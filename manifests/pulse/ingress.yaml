@@ -1,0 +1,51 @@
+# Traefik IngressRoute for Pulse
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pulse
+  namespace: pulse
+  labels:
+    app: pulse
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`pulse.smeyer.ca`)
+      kind: Rule
+      services:
+        - name: pulse
+          port: 7655
+  tls:
+    certResolver: letsencrypt
+
+---
+# HTTP to HTTPS redirect
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pulse-http-redirect
+  namespace: pulse
+  labels:
+    app: pulse
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pulse.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pulse-https-redirect
+      services:
+        - name: pulse
+          port: 7655
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: pulse-https-redirect
+  namespace: pulse
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
