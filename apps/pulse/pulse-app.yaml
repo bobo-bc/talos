@@ -20,7 +20,7 @@ spec:
       helm:
         valueFiles:
           # Reference to values file in your Git repo (source 2)
-          - $values/manifests/pulse/-values.yaml
+          - $values/manifests/pulse/values.yaml
     # Source 2: Your Git repo for values file and additional manifests
     - repoURL: https://github.com/bobo-bc/talos
       targetRevision: HEAD
