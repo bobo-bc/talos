@@ -15,7 +15,7 @@ spec:
     repoURL: https://github.com/bobo-bc/talos
     targetRevision: HEAD
     # Update this path to wherever you place the ghost manifests in your repo
-    path: manifest/ghost
+    path: manifests/ghost
   destination:
     server: https://kubernetes.default.svc
     namespace: ghost
