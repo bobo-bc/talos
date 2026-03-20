@@ -1,0 +1,36 @@
+---
+# ArgoCD Application for Ghost CMS
+# Place this in your argocd/ or apps/ directory in your homelab-cluster repo
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ghost
+  namespace: argocd
+  labels:
+    app: ghost
+spec:
+  project: default
+  source:
+    # Update this to your actual Git repo URL
+    repoURL: https://github.com/bobo-bc/talos
+    targetRevision: HEAD
+    # Update this path to wherever you place the ghost manifests in your repo
+    path: manifest/ghost
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ghost
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      # Ensures secrets and configmaps are applied before deployments
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
