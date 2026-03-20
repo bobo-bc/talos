@@ -1,0 +1,52 @@
+# Cilium values for homelab-cluster
+# Version: cilium-1.19.1
+# Talos-specific configuration with kube-proxy replacement
+# and Hubble observability enabled
+
+# Talos requires cgroup mount to be handled by the OS, not Cilium
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+# Hubble - Cilium's observability layer
+# Provides network flow visibility via UI and relay
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+  ui:
+    enabled: true
+
+# Use Kubernetes IPAM for pod IP allocation
+ipam:
+  mode: kubernetes
+
+# Point at the kube-vip VIP for HA control plane access
+# IMPORTANT: This was updated from 10.0.0.60 to 10.0.0.20 (VIP)
+# so Cilium remains functional if the original CP node goes down
+k8sServiceHost: 10.0.0.20
+k8sServicePort: 6443
+
+# Replace kube-proxy entirely - Talos disables kube-proxy by default
+kubeProxyReplacement: true
+
+# Required capabilities for Cilium agent and state cleanup on Talos
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
