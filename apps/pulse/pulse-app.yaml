@@ -1,0 +1,72 @@
+---
+# ArgoCD Application for Pulse
+# Uses the official Pulse Helm chart with a local values file
+# The values file and additional manifests (secret, ingress) live in your repo
+# under apps/pulse/ and are managed as a separate plain-manifest app below
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pulse
+  namespace: argocd
+  labels:
+    app: pulse
+spec:
+  project: default
+  sources:
+    # Source 1: Official Pulse Helm chart
+    - repoURL: https://rcourtman.github.io/Pulse
+      chart: pulse
+      targetRevision: "*"
+      helm:
+        valueFiles:
+          # Reference to values file in your Git repo (source 2)
+          - $values/apps/pulse/02-values.yaml
+    # Source 2: Your Git repo for values file and additional manifests
+    - repoURL: https://github.com/bobo-bc/homelab-cluster
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pulse
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
+
+---
+# Separate ArgoCD app for the non-Helm manifests (secret, ingress)
+# These need to be applied before the Helm app syncs
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pulse-config
+  namespace: argocd
+  labels:
+    app: pulse
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bobo-bc/talos
+    targetRevision: HEAD
+    path: manifests/pulse
+    directory:
+      include: "{-namespace.yaml,-ingress.yaml}"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pulse
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
