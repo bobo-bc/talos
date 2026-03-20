@@ -20,9 +20,9 @@ spec:
       helm:
         valueFiles:
           # Reference to values file in your Git repo (source 2)
-          - $values/apps/pulse/02-values.yaml
+          - $values/manifests/pulse/-values.yaml
     # Source 2: Your Git repo for values file and additional manifests
-    - repoURL: https://github.com/bobo-bc/homelab-cluster
+    - repoURL: https://github.com/bobo-bc/talos
       targetRevision: HEAD
       ref: values
   destination:
