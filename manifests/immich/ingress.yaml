@@ -1,4 +1,4 @@
-   # Middleware: redirect HTTP -> HTTPS
+# Middleware: redirect HTTP -> HTTPS
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -27,7 +27,7 @@ spec:
   tls:
     secretName: wildcard-smeyer-ca-tls
 ---
-# IngressRoute for HTTP (only used for redirect)
+# IngressRoute for HTTP (only used for redirect to HTTPS)
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -42,5 +42,5 @@ spec:
       middlewares:
         - name: immich-redirect-https
       services:
-        - name: immich
-          port: 80
+        - name: immich-server
+          port: 3001
