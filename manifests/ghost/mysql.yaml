@@ -1,0 +1,113 @@
+---
+# MySQL 8 StatefulSet
+# Runs as non-root UID/GID 65532 to match SREDevOps ghost-on-kubernetes security model
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ghost-mysql
+  namespace: ghost
+  labels:
+    app: ghost-mysql
+spec:
+  serviceName: ghost-mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost-mysql
+  template:
+    metadata:
+      labels:
+        app: ghost-mysql
+    spec:
+      securityContext:
+        fsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        # Fix ownership of the MySQL data directory before MySQL starts
+        - name: fix-permissions
+          image: busybox:1.36
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+          command:
+            - sh
+            - -c
+            - |
+              chown -Rv 65532:65532 /var/lib/mysql && echo "Permissions fixed"
+          volumeMounts:
+            - name: ghost-mysql-data
+              mountPath: /var/lib/mysql
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            runAsUser: 65532
+            runAsGroup: 65532
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-mysql-secrets
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-mysql-secrets
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-mysql-secrets
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ghost-mysql-secrets
+                  key: MYSQL_ROOT_PASSWORD
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: ghost-mysql-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+      volumes:
+        - name: ghost-mysql-data
+          persistentVolumeClaim:
+            claimName: ghost-mysql-pvc
