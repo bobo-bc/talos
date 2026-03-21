@@ -1,0 +1,11 @@
+No PV/PVC definitions needed here.
+# Paperless uses your existing nfs-media-pvc with subPath to isolate
+# subdirectories within /mnt/data on your NFS server:
+#
+#   /mnt/data/paperless/media    -> Paperless document library
+#   /mnt/data/paperless/consume  -> Paperless inbox (drop docs here)
+#
+# Make sure these directories exist on your NFS server before deploying:
+#   mkdir -p /mnt/data/paperless/media /mnt/data/paperless/consume
+#
+# The subPath mounts are defined in manifests/paperless.yaml
