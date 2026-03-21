@@ -14,7 +14,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`paperless.example.com`)   # <-- update to your hostname
+    - match: Host(`paperless.smeyer.ca`)   # <-- update to your hostname
       kind: Rule
       services:
         - name: paperless-ngx
