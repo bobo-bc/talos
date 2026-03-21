@@ -19,6 +19,10 @@ spec:
       labels:
         app.kubernetes.io/name: paperless-ngx
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       initContainers:
         # Wait for PostgreSQL to be ready before starting paperless
         - name: wait-for-db
@@ -149,3 +153,4 @@ spec:
   ports:
     - port: 8000
       targetPort: 8000
+
