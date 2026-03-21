@@ -1,25 +1,46 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+# Middleware: redirect HTTP -> HTTPS
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
 metadata:
-  name: pdfding-ingress
+  name: pdfding-redirect-https
   namespace: pdfding
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+# IngressRoute for HTTPS
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pdfding
+  namespace: pdfding
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`pdf.smeyer.ca`)
+      kind: Rule
+      services:
+        - name: pdfding
+          port: 80
   tls:
-    - hosts:
-        - pdf.smeyer.ca
-      secretName: wildcard-smeyer-ca-tls
-  rules:
-    - host: pdf.smeyer.ca
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: pdfding
-                port:
-                  number: 80
+    secretName: wildcard-smeyer-ca-tls
+---
+# IngressRoute for HTTP (only used for redirect to HTTPS)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pdfding-http
+  namespace: pdfding
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pdf.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pdfding-redirect-https
+      services:
+        - name: pdfding
+          port: 80
