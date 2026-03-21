@@ -1,0 +1,53 @@
+---
+# Traefik IngressRoute for Paperless-ngx
+# and a Traefik middleware for HTTPS redirect.
+# Adjust entryPoints and tls.certResolver to match your Traefik setup.
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-ngx
+  namespace: paperless
+  labels:
+    app.kubernetes.io/name: paperless-ngx
+    app.kubernetes.io/part-of: paperless-ngx
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`paperless.example.com`)   # <-- update to your hostname
+      kind: Rule
+      services:
+        - name: paperless-ngx
+          port: 8000
+  tls:
+    secretName: wildcard-smeyer-ca-tls   # <-- update to your cert resolver name
+---
+# Optional: HTTP -> HTTPS redirect
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-ngx-http
+  namespace: paperless
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`paperless.smeyer.ca`)   # <-- update to your hostname
+      kind: Rule
+      middlewares:
+        - name: redirect-to-https
+          namespace: paperless
+      services:
+        - name: paperless-ngx
+          port: 8000
+---
+# Middleware: redirect HTTP to HTTPS
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-https
+  namespace: paperless
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
