@@ -20,13 +20,24 @@ spec:
         app.kubernetes.io/name: paperless-ngx
     spec:
       securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
-        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       initContainers:
-        # Wait for PostgreSQL to be ready before starting paperless
         - name: wait-for-db
           image: postgres:16-alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
           command:
             - sh
             - -c
@@ -43,6 +54,15 @@ spec:
       containers:
         - name: paperless-ngx
           image: ghcr.io/paperless-ngx/paperless-ngx:latest
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - containerPort: 8000
           env:
@@ -95,7 +115,7 @@ spec:
               value: /usr/src/paperless/data
             # URL - update to your actual hostname
             - name: PAPERLESS_URL
-              value: https://paperless.example.com   # <-- update this
+              value: https://paperless.smeyer.ca  # <-- update this
             # NFS compatibility
             - name: USERMAP_UID
               value: "1000"
