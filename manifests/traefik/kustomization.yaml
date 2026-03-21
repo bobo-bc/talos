@@ -19,7 +19,6 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 39.0.6 
     valuesInline:
-      installCRDs: true
       # This is the "Static Config" argument for the File Provider
       additionalArguments:
         - "--providers.file.directory=/config"
