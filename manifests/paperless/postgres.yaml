@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-db
+  namespace: paperless
+  labels:
+    app.kubernetes.io/name: paperless-db
+    app.kubernetes.io/part-of: paperless-ngx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: paperless-db
+  strategy:
+    type: Recreate   # Required with RWO Longhorn volumes
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: paperless-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-db-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-db-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-db-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "paperless"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "paperless"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: paperless-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless-db
+  namespace: paperless
+  labels:
+    app.kubernetes.io/name: paperless-db
+    app.kubernetes.io/part-of: paperless-ngx
+spec:
+  selector:
+    app.kubernetes.io/name: paperless-db
+  ports:
+    - port: 5432
+      targetPort: 5432
