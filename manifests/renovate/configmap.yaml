@@ -47,22 +47,20 @@ data:
 
       "kubernetes": {
         "fileMatch": [
-          "manifests/.*\\.yaml$",
-          "manifests/.*\\.yml$"
+          "manifests/.*\\.yaml$"
+
         ]
       },
 
       "helm-values": {
         "fileMatch": [
-          ".*values\\.yaml$",
-          ".*values\\.yml$"
+          ".*values\\.yaml$"
         ]
       },
 
       "argocd": {
         "fileMatch": [
-          "argocd/.*\\.yaml$",
-          "argocd/.*\\.yml$"
+          "argocd/.*\\.yaml$"
         ]
       },
 
