@@ -91,7 +91,7 @@ spec:
               value: /usr/src/paperless/data
             # URL - update to your actual hostname
             - name: PAPERLESS_URL
-              value: https://paperless.smeyer.ca  # <-- update this
+              value: https://paperless.smeyer.ca   # <-- update this
             # OCR language (English default; add more e.g. "eng+fra")
             - name: PAPERLESS_OCR_LANGUAGE
               value: eng
@@ -104,10 +104,12 @@ spec:
             - name: PAPERLESS_THREADS_PER_WORKER
               value: "2"
           volumeMounts:
-            - name: media
+            - name: nfs-data
               mountPath: /usr/src/paperless/media
-            - name: consume
+              subPath: paperless/media
+            - name: nfs-data
               mountPath: /usr/src/paperless/consume
+              subPath: paperless/consume
           resources:
             requests:
               cpu: 500m
@@ -129,12 +131,9 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
       volumes:
-        - name: media
+        - name: nfs-data
           persistentVolumeClaim:
-            claimName: paperless-media-pvc
-        - name: consume
-          persistentVolumeClaim:
-            claimName: paperless-consume-pvc
+            claimName: nfs-media-pvc   # Your existing bound PVC
 ---
 apiVersion: v1
 kind: Service
