@@ -91,7 +91,7 @@ spec:
               value: /usr/src/paperless/data
             # URL - update to your actual hostname
             - name: PAPERLESS_URL
-              value: https://paperless.smeyer.ca   # <-- update this
+              value: https://paperless.example.com   # <-- update this
             # OCR language (English default; add more e.g. "eng+fra")
             - name: PAPERLESS_OCR_LANGUAGE
               value: eng
@@ -133,7 +133,7 @@ spec:
       volumes:
         - name: nfs-data
           persistentVolumeClaim:
-            claimName: nfs-media-pvc   # Your existing bound PVC
+            claimName: paperless-nfs-pvc
 ---
 apiVersion: v1
 kind: Service
