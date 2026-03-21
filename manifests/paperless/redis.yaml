@@ -19,10 +19,30 @@ spec:
       labels:
         app.kubernetes.io/name: paperless-redis
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: redis
           image: redis:7-alpine
-          command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 999
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - redis-server
+            - --save 60 1
+            - --loglevel warning
+            - --dir /data/redis   # subdirectory to avoid Longhorn's lost+found
           ports:
             - containerPort: 6379
           volumeMounts:
