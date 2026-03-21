@@ -78,6 +78,10 @@ data:
             - abbr: GH
               icon: github-light.png
               href: https://github.com/bobo-bc/
+        - Giftful:
+            - abbr: GF
+              icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
+              href: https://giftful.com/stevenmeyer2
     - Design and Icons:
         - Material Design Pictogramer:
             - abbr: MD
@@ -123,14 +127,14 @@ data:
             icon: immich.png
             href: https://pics.smeyer.ca/
             description: photo curation
+        - Paperless-ngx:
+            icon: paperless.png
+            href: https://paperless.smeyer.ca/
+            description: document mannagement      
         - Kavita:
             icon: kavita.png
             href: https://books.smeyer.ca/
             description: Book reader
-        - Giftful:
-            icon: https://dyr69yan0mo6n.cloudfront.net/giftful/images/logo_giftful.png?v=1
-            href: https://giftful.com/stevenmeyer2
-            description: gift registry of things that I covet
     - Productivity:
         - Wikijs:
             icon: wikijs.png
