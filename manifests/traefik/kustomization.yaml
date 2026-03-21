@@ -17,7 +17,7 @@ helmCharts:
     releaseName: traefik
     namespace: traefik
     repo: https://traefik.github.io/charts
-    version: 39.0.0 
+    version: 39.0.6 
     valuesInline:
       installCRDs: true
       # This is the "Static Config" argument for the File Provider
