@@ -42,7 +42,7 @@ spec:
                   key: POSTGRES_PASSWORD
           volumeMounts:
             - name: db-data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql/data/db-data
           resources:
             requests:
               cpu: 100m
