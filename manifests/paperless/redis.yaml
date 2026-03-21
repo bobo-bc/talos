@@ -26,21 +26,6 @@ spec:
         fsGroup: 999
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: init-redis-dir
-          image: busybox
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: false
-            runAsUser: 0
-            capabilities:
-              drop: ["ALL"]
-            seccompProfile:
-              type: RuntimeDefault
-          command: ["sh", "-c", "mkdir -p /data/redis && chown -R 999:999 /data/redis"]
-          volumeMounts:
-            - name: redis-data
-              mountPath: /data
       containers:
         - name: redis
           image: redis:7-alpine
