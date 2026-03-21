@@ -13,19 +13,14 @@ spec:
     matchLabels:
       app.kubernetes.io/name: paperless-ngx
   strategy:
-    type: Recreate   # Required — do not use RollingUpdate with shared NFS volumes
+    type: Recreate  # Required — do not use RollingUpdate with shared NFS volumes
   template:
     metadata:
       labels:
         app.kubernetes.io/name: paperless-ngx
     spec:
       securityContext:
-        fsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        seccompProfile:
-          type: RuntimeDefault
+        fsGroup: 1000  # Ensures NFS volume is writable by uid 1000
       initContainers:
         - name: wait-for-db
           image: postgres:16-alpine
@@ -54,15 +49,11 @@ spec:
       containers:
         - name: paperless-ngx
           image: ghcr.io/paperless-ngx/paperless-ngx:latest
+          # s6-overlay requires root to set up /run then drops to uid 1000
+          # via USERMAP_UID/GID — do not set runAsNonRoot or runAsUser here
           securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            capabilities:
-              drop: ["ALL"]
-            seccompProfile:
-              type: RuntimeDefault
+            allowPrivilegeEscalation: true
+            runAsUser: 0
           ports:
             - containerPort: 8000
           env:
@@ -85,7 +76,7 @@ spec:
             # Redis
             - name: PAPERLESS_REDIS
               value: redis://paperless-redis:6379
-            # App settings
+            # App secrets
             - name: PAPERLESS_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -113,24 +104,24 @@ spec:
               value: /usr/src/paperless/media
             - name: PAPERLESS_DATA_DIR
               value: /usr/src/paperless/data
-            # URL - update to your actual hostname
+            # URL
             - name: PAPERLESS_URL
-              value: https://paperless.smeyer.ca  # <-- update this
-            # NFS compatibility
+              value: https://paperless.smeyer.ca
+            # NFS — s6-overlay drops to this uid/gid after init
             - name: USERMAP_UID
               value: "1000"
             - name: USERMAP_GID
               value: "1000"
-            # NFS doesn't support inotify — use polling instead
+            # NFS doesn't support inotify so use polling
             - name: PAPERLESS_CONSUMER_POLLING
               value: "60"
-            # OCR language (English default; add more e.g. "eng+fra")
+            # OCR
             - name: PAPERLESS_OCR_LANGUAGE
               value: eng
             # Timezone
             - name: PAPERLESS_TIME_ZONE
-              value: America/Vancouver              # <-- update to your TZ
-            # Enable automatic tagging with ML
+              value: America/Vancouver
+            # Workers
             - name: PAPERLESS_TASK_WORKERS
               value: "2"
             - name: PAPERLESS_THREADS_PER_WORKER
