@@ -32,11 +32,11 @@ http:
       service: argo-external
       tls: {}
 
-    longhorn-router:
-      rule: "Host(`longhorn.smeyer.ca`)"
-      entryPoints: ["websecure"]
-      service: longhorn-external
-      tls: {}
+#    longhorn-router:
+#      rule: "Host(`longhorn.smeyer.ca`)"
+#      entryPoints: ["websecure"]
+#      service: longhorn-external
+#      tls: {}
 
     homeassist-router:
       rule: "Host(`homeassist.smeyer.ca`)"
