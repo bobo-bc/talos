@@ -26,11 +26,11 @@ http:
       service: pve-external
       tls: {}
 
-    argo-router:
-      rule: "Host(`argo.smeyer.ca`)"
-      entryPoints: ["websecure"]
-      service: argo-external
-      tls: {}
+ #   argo-router:
+ #     rule: "Host(`argo.smeyer.ca`)"
+ #     entryPoints: ["websecure"]
+ #     service: argo-external
+ #     tls: {}
 
 #    longhorn-router:
 #      rule: "Host(`longhorn.smeyer.ca`)"
@@ -76,16 +76,16 @@ http:
           - url: "https://10.0.0.5:8006"
         serversTransport: insecureTransport
 
-    argo-external:
-      loadBalancer:
-        servers:
-          - url: "https://10.0.0.66:443" 
-        serversTransport: insecureTransport
+#    argo-external:
+#      loadBalancer:
+#        servers:
+#          - url: "https://10.0.0.66:443" 
+#        serversTransport: insecureTransport
 
-    longhorn-external:
-      loadBalancer:
-        servers:
-          - url: "http://10.0.0.65:80"
+#    longhorn-external:
+#      loadBalancer:
+#        servers:
+#          - url: "http://10.0.0.65:80"
 
     homeassist-external:
       loadBalancer:
