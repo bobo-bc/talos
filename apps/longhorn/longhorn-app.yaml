@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: argocd
+  annotations:
+    # Tells ArgoCD to adopt the existing Helm release rather than reinstall
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: https://charts.longhorn.io
+    chart: longhorn
+    targetRevision: 1.11.0
+    helm:
+      valuesObject:
+        defaultSettings:
+          defaultDataPath: /var/lib/longhorn
+          iscsiIdbmDirectory: /usr/local/lib/iscsi
+        longhornDriver:
+          iscsiadmPath: /usr/local/lib/iscsi/iscsiadm
+        service:
+          ui:
+            # Changed from LoadBalancer to ClusterIP
+            # Traefik IngressRoute handles external access instead
+            type: ClusterIP
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: longhorn-system
+  syncPolicy:
+    automated:
+      prune: false           # Do NOT auto-prune on first adoption - safety measure
+      selfHeal: false        # Disable until you've confirmed first sync is clean
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true # Safer for adopting existing resources
