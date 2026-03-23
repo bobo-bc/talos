@@ -29,8 +29,8 @@ spec:
     namespace: longhorn-system
   syncPolicy:
     automated:
-      prune: false           # Do NOT auto-prune on first adoption - safety measure
-      selfHeal: false        # Disable until you've confirmed first sync is clean
+      prune: true           # Do NOT auto-prune on first adoption - safety measure
+      selfHeal: true        # Disable until you've confirmed first sync is clean
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
