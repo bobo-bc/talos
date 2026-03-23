@@ -16,7 +16,7 @@ spec:
         - name: pulse
           port: 7655
   tls:
-    certResolver: letsencrypt
+    secretName: wildcard-smeyer-ca-tls 
 
 ---
 # HTTP to HTTPS redirect
