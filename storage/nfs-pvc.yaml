@@ -1,0 +1,14 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-media-pvc
+  namespace: media
+spec:
+  storageClassName: nfs-static
+  volumeName: nfs-media-pv # THE SECRET SAUCE
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
