@@ -1,0 +1,34 @@
+---
+# Persistent volume for Ghost content (themes, images, files)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-content-pvc
+  namespace: ghost
+  labels:
+    app: ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# Persistent volume for MySQL data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-mysql-pvc
+  namespace: ghost
+  labels:
+    app: ghost
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 5Gi
+
