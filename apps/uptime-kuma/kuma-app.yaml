@@ -12,9 +12,15 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: uptime-kuma
+  ignoreDifferences:             # ADD THIS BLOCK
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
-      prune: true
+      prune: false               # CHANGE from true to false
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
