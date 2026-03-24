@@ -5,6 +5,7 @@ namespace: renovate
 
 resources:
   - namespace.yaml
- # - secret.yaml
   - configmap.yaml
   - cronjob.yaml
+generators:
+  - ksops-generator.yaml  
