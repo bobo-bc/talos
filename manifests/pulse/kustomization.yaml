@@ -4,3 +4,5 @@ kind: Kustomization
 resources:
   -namespace.yaml
   -ingress.yaml
+generators:
+  - ksops-generator.yaml  
