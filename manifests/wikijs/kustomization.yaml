@@ -6,3 +6,5 @@ resources:
   - postgres.yaml
   - deployment.yaml
   - ingress.yaml
+generators:
+  - ksops-generator.yaml  
