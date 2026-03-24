@@ -4,8 +4,6 @@ kind: Kustomization
 namespace: paperless
 
 resources:
-  - namespace.yaml
-  - pvc.yaml
   - postgres.yaml
   - redis.yaml
   - deployment.yaml
