@@ -8,4 +8,4 @@ resources:
   - redis.yaml
   - server-service.yaml
   - postgres.yaml
-  - pvc.yaml
+
