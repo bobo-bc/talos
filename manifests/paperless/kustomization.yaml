@@ -9,3 +9,5 @@ resources:
   - deployment.yaml
   - ingressroute.yaml
   - namespace.yaml
+generators:
+  - ksops-generator.yaml  
