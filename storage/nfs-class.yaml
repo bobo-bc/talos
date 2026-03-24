@@ -1,0 +1,6 @@
+ersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs
+provisioner: kubernetes.io/no-provisioner # Tells K8s this is for manual PVs only
+volumeBindingMode: Immediate
