@@ -1,0 +1,39 @@
+# A dedicated PV for the paperless namespace pointing to the same
+# NFS export as your existing nfs-media-pv.
+# claimRef pre-binds it so nothing else can claim it.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: paperless-nfs-pv
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-static
+  mountOptions:
+    - nfsvers=4.1
+    - hard
+    - timeo=600
+    - retrans=2
+  nfs:
+    path: /
+    server: 10.0.0.5
+  claimRef:
+    name: paperless-nfs-pvc
+    namespace: paperless
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-nfs-pvc
+  namespace: paperless
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-static
+  resources:
+    requests:
+      storage: 500Gi
+  volumeName: paperless-nfs-pv
