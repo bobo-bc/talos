@@ -1,0 +1,89 @@
+# =============================================================================
+# Authentik Helm Values - Talos Homelab
+# Version: 2026.2.1
+# Provides: SSO/Identity Provider for Hubble and Longhorn
+# =============================================================================
+
+authentik:
+  # Secret key - must match what's in your SOPS encrypted secret
+  secret_key: "$(AUTHENTIK_SECRET_KEY)"
+
+  # PostgreSQL connection - uses in-cluster postgres
+  postgresql:
+    host: "authentik-postgresql"
+    name: "authentik"
+    user: "authentik"
+    password: "$(AUTHENTIK_POSTGRESQL_PASSWORD)"
+
+  # Redis connection - uses in-cluster redis
+  redis:
+    host: "authentik-redis-master"
+    password: "$(AUTHENTIK_REDIS_PASSWORD)"
+
+  # Email configuration for password resets
+  email:
+    host: "smtp.mailgun.org"
+    port: 587
+    use_tls: true
+    username: "postmaster@smeyer.ca"
+    password: "$(AUTHENTIK_EMAIL_PASSWORD)"
+    from: "authentik@smeyer.ca"
+
+# -----------------------------------------------------------------------------
+# Server
+# -----------------------------------------------------------------------------
+server:
+  replicas: 1
+  ingress:
+    enabled: false          # We use Traefik IngressRoute instead
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+# -----------------------------------------------------------------------------
+# Worker
+# -----------------------------------------------------------------------------
+worker:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# -----------------------------------------------------------------------------
+# PostgreSQL - Bitnami subchart
+# -----------------------------------------------------------------------------
+postgresql:
+  enabled: true
+  auth:
+    username: authentik
+    database: authentik
+    password: "$(AUTHENTIK_POSTGRESQL_PASSWORD)"
+  primary:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 10Gi
+
+# -----------------------------------------------------------------------------
+# Redis - Bitnami subchart
+# -----------------------------------------------------------------------------
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: "$(AUTHENTIK_REDIS_PASSWORD)"
+  master:
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 2Gi
+
