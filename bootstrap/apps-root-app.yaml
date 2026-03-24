@@ -3,20 +3,40 @@ kind: Application
 metadata:
   name: apps-root
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  # Finalizer removed - prevents cascade deletion of all workloads
 spec:
   project: default
   source:
-    repoURL: https://github.com/bobo-bc/talos.git # Use your actual Repo URL
+    repoURL: https://github.com/bobo-bc/talos.git
     targetRevision: HEAD
-    path: apps # The folder you want to watch
+    path: apps
     directory:
-      recurse: true # This allows subfolders like apps/sonarr
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd # The Root app lives in argocd, but children can go elsewhere
+    namespace: argocd
+  ignoreDifferences:
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
+    - group: ""
+      kind: PersistentVolume
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false       # Don't auto-delete child apps
+      selfHeal: true     # Fix drift but never delete
+    syncOptions:
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true
+      - CreateNamespace=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
