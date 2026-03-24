@@ -28,6 +28,12 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: pulse
+  ignoreDifferences:             # ADD THIS BLOCK
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
       prune: false
@@ -35,6 +41,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
     retry:
       limit: 3
       backoff:
