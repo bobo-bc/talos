@@ -8,4 +8,5 @@ resources:
   - redis.yaml
   - server-service.yaml
   - postgres.yaml
-
+generators:
+  - ksops-generator.yaml  
