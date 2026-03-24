@@ -4,3 +4,5 @@ namespace: recyclarr
 resources:
   - configmap.yaml
   - cronjob.yaml
+generators:
+  - ksops-generator.yaml  
