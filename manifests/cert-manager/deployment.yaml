@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    # Source 1: The Official Helm Chart
+    - repoURL: 'https://charts.jetstack.io'
+      chart: cert-manager
+      targetRevision: v1.14.0 # Use your desired version
+      helm:
+        values: |
+          installCRDs: true
+          # Any other helm values you usually use
+
+    # Source 2: Your KSOPS Secret Folder
+    - repoURL: 'https://github.com/ybob-bc/talos.git' # Your actual repo
+      path: manifests/cert-manager
+      targetRevision: HEAD
+  
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: cert-manager
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
