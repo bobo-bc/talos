@@ -8,3 +8,4 @@ resources:
   - redis.yaml
   - deployment.yaml
   - ingressroute.yaml
+  - namespace.yaml
