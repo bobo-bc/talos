@@ -27,6 +27,12 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
+  ignoreDifferences:             # ADD THIS BLOCK
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
       prune: false           # Do NOT auto-prune on first adoption - safety measure
