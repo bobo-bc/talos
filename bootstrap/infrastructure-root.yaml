@@ -10,11 +10,32 @@ spec:
     targetRevision: HEAD
     path: infrastructure
     directory:
-      recurse: true # We only want it to read the App manifests in the root of /infrastructure
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
+  ignoreDifferences:
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
+    - group: ""
+      kind: PersistentVolume
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false        # NEVER prune infrastructure
+      selfHeal: true      # Fix drift but never delete
+    syncOptions:
+      - RespectIgnoreDifferences=true
+      - ServerSideApply=true
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 30s     # Longer backoff for infrastructure
+        factor: 2
+        maxDuration: 10m
