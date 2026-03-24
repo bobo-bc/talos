@@ -12,7 +12,15 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: wikijs
+  ignoreDifferences:             # ADD THIS BLOCK
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
   syncPolicy:
     automated:
-      prune: true
+      prune: false               # CHANGE from true to false
       selfHeal: true
+    syncOptions:
+      - RespectIgnoreDifferences=true
