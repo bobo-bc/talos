@@ -23,7 +23,7 @@ spec:
             RELAY_MAILGUN_EMAIL_DOMAIN: "smeyer.ca"
 
     # Source 2: Your local manifests (where KSOPS lives)
-    - repoURL: 'https://github.com/your-user/your-repo.git' # Replace with your repo
+    - repoURL: 'https://github.com/bobo-bc/talos.git' # Replace with your repo
       path: manifests/riotkit
       targetRevision: HEAD
   
