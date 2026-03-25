@@ -15,7 +15,7 @@ spec:
     # Source 2: The official Helm Chart
     - repoURL: 'https://riotkit-org.github.io/helm-of-revolution/'
       chart: smtp-ext-relay
-      targetRevision: 1.2.x
+      targetRevision: 1.2.0-rc2
       helm:
         values: |
           extraEnvFrom:
