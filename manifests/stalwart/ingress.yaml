@@ -14,9 +14,9 @@ spec:
   tls:
     - secretName: stalwart-tls
       hosts:
-        - mail.smeyer.ca  # adjust to your mail domain
+        - postmaster.mg.smeyer.ca  # adjust to your mail domain
   rules:
-    - host: mail.smeyer.ca  # adjust to your mail domain
+    - host: mg.smeyer.ca  # adjust to your mail domain
       http:
         paths:
           - path: /
