@@ -1,0 +1,7 @@
+# manifests/riotkit/ksops-generator.yaml
+apiVersion: viaduct.ai/v1
+kind: ksops
+metadata:
+  name: riotkit-secrets-generator
+files:
+  - secret.yaml
