@@ -44,6 +44,22 @@ helmCharts:
         metrics:
           port: 8082
           exposedPort: 8082
+        smtp:
+          port: 25
+          exposedPort: 25
+          protocol: TCP
+        submission:
+          port: 587
+          exposedPort: 587
+          protocol: TCP
+        smtps:
+          port: 465
+          exposedPort: 465
+          protocol: TCP
+        imaps:
+          port: 993
+          exposedPort: 993
+          protocol: TCP  
 
 # --- THE PATCH (Add this at the very bottom) ---
 patches:
