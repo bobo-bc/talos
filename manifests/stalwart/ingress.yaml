@@ -12,7 +12,7 @@ metadata:
 spec:
   ingressClassName: traefik
   tls:
-    - secretName: stalwart-tls
+    secretName: wildcard-smeyer-ca-tls 
       hosts:
         - postmaster.mg.smeyer.ca  # adjust to your mail domain
   rules:
