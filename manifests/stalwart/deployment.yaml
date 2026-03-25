@@ -21,7 +21,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: stalwart
-          image: stalwartlabs/server:v0.15.5
+          image: stalwartlabs/stalwart:latest
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0  # Stalwart needs root to bind low ports
