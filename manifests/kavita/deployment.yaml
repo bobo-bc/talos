@@ -29,14 +29,13 @@ spec:
             - containerPort: 5000
           volumeMounts:
             - name: config
-              mountPath: /kavita/config
-            - name: books
-              mountPath: /books
-              subPath: media/books
+              mountPath: /config
+            - name: media
+              mountPath: /data
       volumes:
         - name: config
           persistentVolumeClaim:
             claimName: kavita-config
-        - name: books
+        - name: media
           persistentVolumeClaim:
             claimName: nfs-media-pvc
