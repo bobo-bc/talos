@@ -117,7 +117,7 @@ data:
     - Home and Media:
         - HomeAssistant:
             icon: home-assistant.png
-            href: https://homeassist.smeyer.ca:8123
+            href: http://10.0.2.4:8123
             description: home automation
         - Plex:
             icon: plex.png
