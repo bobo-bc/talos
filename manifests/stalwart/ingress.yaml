@@ -14,9 +14,9 @@ spec:
   tls:
     - secretName: wildcard-smeyer-ca-tls 
       hosts:
-        - postmaster.mg.smeyer.ca  # adjust to your mail domain
+        - mail.smeyer.ca  # adjust to your mail domain
   rules:
-    - host: mg.smeyer.ca  # adjust to your mail domain
+    - host: mail.smeyer.ca  # adjust to your mail domain
       http:
         paths:
           - path: /
