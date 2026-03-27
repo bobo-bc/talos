@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pocketid
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bobo-bc/talos.git
+    targetRevision: HEAD
+    path: manifests/pocketid
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pocketid
+  ignoreDifferences:
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
