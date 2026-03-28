@@ -1,0 +1,11 @@
+# manifests/homeassistant/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassistant
+  namespace: homeassistant
+spec:
+  type: ExternalName
+  externalName: 10.0.2.4    # Your Home Assistant IP
+  ports:
+    - port: 8123
