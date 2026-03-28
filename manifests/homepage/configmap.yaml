@@ -204,7 +204,7 @@ data:
             description: App deployment
     - Network:
         - PocketID:
-            icon: pocketid.png
+            icon: pocket-id.png
             href: https://id.smeyer.ca/
             description: single signon authority
         - Unifi Gateway:
