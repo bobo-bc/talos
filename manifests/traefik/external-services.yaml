@@ -28,7 +28,7 @@ http:
     pbs-router:
       rule: "Host(`pbs.smeyer.ca`)"
       entryPoints: ["websecure"]
-      service: pve-external
+      service: pbs-external
       tls: {}
  #   argo-router:
  #     rule: "Host(`argo.smeyer.ca`)"
