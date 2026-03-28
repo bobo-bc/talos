@@ -42,11 +42,11 @@ http:
 #      service: longhorn-external
 #      tls: {}
 
-    homeassist-router:
-      rule: "Host(`homeassist.smeyer.ca`)"
-      entryPoints: ["web"]
-      service: homeassist-external
-      tls: {}
+ #   homeassist-router:
+ #     rule: "Host(`homeassist.smeyer.ca`)"
+ #     entryPoints: ["web"]
+ #     service: homeassist-external
+ #     tls: {}
   
   # --- Middleware Definitions ---
   middlewares:
@@ -96,10 +96,10 @@ http:
 #        servers:
 #          - url: "http://10.0.0.65:80"
 
-    homeassist-external:
-      loadBalancer:
-        servers:
-          - url: "http://10.0.2.4:8123"
+  #  homeassist-external:
+  #    loadBalancer:
+  #      servers:
+  #        - url: "http://10.0.2.4:8123"
 
   # --- Global Transport Settings ---
   serversTransports:
