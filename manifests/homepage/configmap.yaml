@@ -203,9 +203,9 @@ data:
             href: https://argo.smeyer.ca/
             description: App deployment
     - Network:
-        - Authentik:
-            icon: authentik.png
-            href: https://auth.smeyer.ca/
+        - PocketID:
+            icon: pocketid.png
+            href: https://id.smeyer.ca/
             description: single signon authority
         - Unifi Gateway:
             icon: ubiquiti-unifi.png
