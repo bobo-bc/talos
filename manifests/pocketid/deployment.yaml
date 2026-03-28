@@ -42,6 +42,11 @@ spec:
               value: "https://id.smeyer.ca"
             - name: TRUST_PROXY
               value: "true"
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pocketid-secrets
+                  key: ENCRYPTION_KEY
             - name: PUID
               value: "1000"
             - name: PGID
