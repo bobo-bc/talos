@@ -44,7 +44,7 @@ http:
 
     homeassist-router:
       rule: "Host(`homeassist.smeyer.ca`)"
-      entryPoints: ["websecure"]
+      entryPoints: ["web"]
       service: homeassist-external
       tls: {}
   
@@ -99,7 +99,7 @@ http:
     homeassist-external:
       loadBalancer:
         servers:
-          - url: "https://10.0.2.4:8123"
+          - url: "http://10.0.2.4:8123"
 
   # --- Global Transport Settings ---
   serversTransports:
