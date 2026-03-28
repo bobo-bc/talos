@@ -25,7 +25,11 @@ http:
       entryPoints: ["websecure"]
       service: pve-external
       tls: {}
-
+    pbs-router:
+      rule: "Host(`pbs.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: pve-external
+      tls: {}
  #   argo-router:
  #     rule: "Host(`argo.smeyer.ca`)"
  #     entryPoints: ["websecure"]
@@ -75,7 +79,12 @@ http:
         servers:
           - url: "https://10.0.0.5:8006"
         serversTransport: insecureTransport
-
+        
+    pbs-external:
+      loadBalancer:
+        servers:
+          - url: "https://10.0.0.10:8007"
+        serversTransport: insecureTransport
 #    argo-external:
 #      loadBalancer:
 #        servers:
