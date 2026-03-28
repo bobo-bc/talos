@@ -43,7 +43,7 @@ data:
         style: row
         icon: mdi-folder-multiple-image
       Network:
-        columns: 3
+        columns: 4
         style: row
         icon: mdi-folder-multiple-image
       Monitoring:
