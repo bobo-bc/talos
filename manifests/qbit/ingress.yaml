@@ -1,34 +1,19 @@
+# Middleware: redirect HTTP -> HTTPS
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: qbittorrent-redirect-https
+  name: qbittorent-redirect-https
   namespace: media
 spec:
   redirectScheme:
     scheme: https
     permanent: true
 ---
+# IngressRoute for HTTP (redirect only)
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: qbittorrent
-  namespace: media
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`torrent.smeyer.ca`)
-      kind: Rule
-      services:
-        - name: qbittorrent
-          port: 80
-  tls:
-    secretName: wildcard-smeyer-ca-tls 
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: qbittorrent-http
+  name: qbittorent-http
   namespace: media
 spec:
   entryPoints:
@@ -37,7 +22,28 @@ spec:
     - match: Host(`torrent.smeyer.ca`)
       kind: Rule
       middlewares:
-        - name: qbittorrent-redirect-https
+        - name: qbittorent-redirect-https
       services:
-        - name: qbittorrent
+        - name: qbittorent
           port: 80
+---
+# IngressRoute for HTTPS with PocketID auth
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: qbittorent
+  namespace: media
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`torrent.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
+      services:
+        - name: qbittorent
+          port: 80
+  tls:
+    secretName: wildcard-smeyer-ca-tls
