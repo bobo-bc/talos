@@ -34,7 +34,7 @@ http:
 
     homeassist-router:
       rule: "Host(`homeassist.smeyer.ca`)"
-      entryPoints: ["web"]
+      entryPoints: ["websecure"]
       service: homeassist-external
       tls: {}
   
