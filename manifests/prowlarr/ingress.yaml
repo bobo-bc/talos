@@ -9,25 +9,7 @@ spec:
     scheme: https
     permanent: true
 ---
-# IngressRoute for HTTPS
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: prowlarr
-  namespace: media
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`index.smeyer.ca`)
-      kind: Rule
-      services:
-        - name: prowlarr
-          port: 9696
-  tls:
-    secretName: wildcard-smeyer-ca-tls
----
-# IngressRoute for HTTP (only used for redirect to HTTPS)
+# IngressRoute for HTTP (redirect only)
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -44,3 +26,24 @@ spec:
       services:
         - name: prowlarr
           port: 9696
+---
+# IngressRoute for HTTPS with PocketID auth
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prowlarr
+  namespace: media
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`index.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
+      services:
+        - name: prowlarr
+          port: 9696
+  tls:
+    secretName: wildcard-smeyer-ca-tls
