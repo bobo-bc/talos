@@ -35,7 +35,7 @@ data:
               # PocketID server endpoint
               endpoint: "https://id.smeyer.ca"
               # Client ID from PocketID OIDC client
-              clientID: "${POCKETID_CLIENT_ID}"
+              clientID: "040abdf0-d08f-496e-8fc6-a4913eef4187"
               # Client secret mounted as file (more secure)
               clientSecretFile: "/secrets/client-secret"
               scopes: "openid profile email groups"
