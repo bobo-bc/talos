@@ -51,7 +51,7 @@ http:
       plugin:
         traefik-oidc-auth:
           # Generate with: openssl rand -base64 32
-          Secret: "QDeyJEAXFfCOi7WfrhSUzNJ9VD5Zk1Y"
+          Secret: "199cf9d2cebff4feb8d3a304c7757622bc581eef1fe536e10efabb45d53b4a64"
           Provider:
             Url: "https://id.smeyer.ca"
             ClientId: "040abdf0-d08f-496e-8fc6-a4913eef4187"
