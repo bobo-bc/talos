@@ -6,39 +6,32 @@ metadata:
 data:
   config.yaml: |
     # ==========================================================================
-    # Traefik Forward Auth v4 - PocketID Configuration
+    # Traefik Forward Auth v4.8 - PocketID Configuration
     # ==========================================================================
 
-    # Hostname that this service is reachable at
-    # Used for OAuth2 callbacks
+    # Hostname that this service is reachable at (for OAuth2 callbacks)
     hostname: "tfa.smeyer.ca"
 
-    # Cookie domain - covers all your subdomains with a single cookie
-    cookieDomain: "smeyer.ca"
-
-    # Cookie prefix
-    cookiePrefix: "tfa"
+    # Cookie settings
+    cookie:
+      # Single cookie covers all subdomains
+      domain: "smeyer.ca"
 
     # Session lifetime
-    sessionLifetime: "24h"
+    session:
+      lifetime: "24h"
 
-    # Token signing key - leave empty to auto-generate (recommended)
-    # or set explicitly for persistence across restarts:
-    # tokens:
-    #   signingKeyFile: "/secrets/signing-key"
-
-    # Portal configuration - defines the login page
+    # Portal configuration
     portals:
       - name: "default"
-        # PocketID OIDC provider
         providers:
           - openIDConnect:
               name: "pocketid"
               displayName: "PocketID"
-              # Issuer URL - PocketID's OIDC discovery endpoint
+              # PocketID OIDC discovery endpoint
               tokenIssuer: "https://id.smeyer.ca"
               clientID: "${POCKETID_CLIENT_ID}"
               clientSecretFile: "/secrets/client-secret"
               scopes: "openid profile email"
-              # Enable PKCE for security
-              pkce: true
+              # Enable PKCE
+              usePKCE: true
