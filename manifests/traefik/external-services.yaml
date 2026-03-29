@@ -30,23 +30,13 @@ http:
       entryPoints: ["websecure"]
       service: pbs-external
       tls: {}
- #   argo-router:
- #     rule: "Host(`argo.smeyer.ca`)"
- #     entryPoints: ["websecure"]
- #     service: argo-external
- #     tls: {}
 
-#    longhorn-router:
-#      rule: "Host(`longhorn.smeyer.ca`)"
-#      entryPoints: ["websecure"]
-#      service: longhorn-external
-#      tls: {}
 
- #   homeassist-router:
- #     rule: "Host(`homeassist.smeyer.ca`)"
- #     entryPoints: ["web"]
- #     service: homeassist-external
- #     tls: {}
+    homeassist-router:
+      rule: "Host(`homeassist.smeyer.ca`)"
+      entryPoints: ["web"]
+      service: homeassist-external
+      tls: {}
   
   # --- Middleware Definitions ---
   middlewares:
@@ -85,21 +75,12 @@ http:
         servers:
           - url: "https://10.0.0.10:8007"
         serversTransport: insecureTransport
-#    argo-external:
-#      loadBalancer:
-#        servers:
-#          - url: "https://10.0.0.66:443" 
-#        serversTransport: insecureTransport
 
-#    longhorn-external:
-#      loadBalancer:
-#        servers:
-#          - url: "http://10.0.0.65:80"
 
-  #  homeassist-external:
-  #    loadBalancer:
-  #      servers:
-  #        - url: "http://10.0.2.4:8123"
+    homeassist-external:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.2.4:8123"
 
   # --- Global Transport Settings ---
   serversTransports:
