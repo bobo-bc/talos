@@ -9,25 +9,7 @@ spec:
     scheme: https
     permanent: true
 ---
-# IngressRoute for HTTPS
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: radarr
-  namespace: media
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`movies.smeyer.ca`)
-      kind: Rule
-      services:
-        - name: radarr
-          port: 7878
-  tls:
-    secretName: wildcard-smeyer-ca-tls
----
-# IngressRoute for HTTP (only used for redirect to HTTPS)
+# IngressRoute for HTTP (redirect only)
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -43,4 +25,25 @@ spec:
         - name: radarr-redirect-https
       services:
         - name: radarr
+          port: 7870
+---
+# IngressRoute for HTTPS with PocketID auth
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: radarr
+  namespace: media
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`movies.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
+      services:
+        - name: radarr
           port: 7878
+  tls:
+    secretName: wildcard-smeyer-ca-tls
