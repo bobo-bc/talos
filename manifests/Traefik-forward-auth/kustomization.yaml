@@ -8,5 +8,4 @@ resources:
   - service.yaml
   - ingressroute.yaml
   - Middleware.yaml
-generators:
-  - ksops-generator.yaml
+
