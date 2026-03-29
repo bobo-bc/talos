@@ -16,21 +16,13 @@ helmCharts:
     repo: https://traefik.github.io/charts
     version: 39.0.6
     valuesInline:
+      providers:
+        kubernetesCRD:
+          allowCrossNamespace: true
       # This is the "Static Config" argument for the File Provider
       additionalArguments:
         - "--providers.file.directory=/config"
         - "--providers.file.watch=true"
-        # Enable experimental plugins
-        - "--experimental.plugins.traefik-oidc-auth.moduleName=github.com/sevensolutions/traefik-oidc-auth"
-        - "--experimental.plugins.traefik-oidc-auth.version=v0.8.0"
-
-      # Enable experimental features for plugins
-      experimental:
-        plugins:
-          traefik-oidc-auth:
-            moduleName: "github.com/sevensolutions/traefik-oidc-auth"
-            version: "v0.8.0"
-
       ingressClass:
         enabled: true
         isDefaultClass: true
