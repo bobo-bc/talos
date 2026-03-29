@@ -42,5 +42,5 @@ spec:
       middlewares:
         - name: prowlarr-redirect-https
       services:
-        - name: prowwlarr
+        - name: prowlarr
           port: 9696
