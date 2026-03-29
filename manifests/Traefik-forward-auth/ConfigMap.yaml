@@ -17,6 +17,7 @@ data:
     cookies:
       # Single cookie covers all *.smeyer.ca subdomains
       domain: "smeyer.ca"
+      insecure: false
 
     tokens:
       # Session lifetime - randomly generated signing key on startup (recommended)
@@ -39,4 +40,4 @@ data:
               # Client secret mounted as file (more secure)
               clientSecretFile: "/secrets/client-secret"
               scopes: "openid profile email groups"
-              enablePKCE: true
+              enablePKCE: false
