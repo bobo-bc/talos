@@ -49,6 +49,8 @@ spec:
                 secretKeyRef:
                   name: pdfding-secrets
                   key: OIDC_CLIENT_SECRET
+            - name: OIDC_AUTH_URL
+              value: "https://id.smeyer.ca/authorize"
             - name: OIDC_AUTHORIZATION_ENDPOINT
               value: "https://id.smeyer.ca/authorize"
             - name: OIDC_TOKEN_ENDPOINT
