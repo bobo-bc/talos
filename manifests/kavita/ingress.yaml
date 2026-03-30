@@ -19,6 +19,9 @@ spec:
   routes:
     - match: Host(`books.smeyer.ca`)
       kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
       services:
         - name: kavita
           port: 80
