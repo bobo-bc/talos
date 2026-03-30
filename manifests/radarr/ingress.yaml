@@ -25,7 +25,7 @@ spec:
         - name: radarr-redirect-https
       services:
         - name: radarr
-          port: 7870
+          port: 7878
 ---
 # IngressRoute for HTTPS with PocketID auth
 apiVersion: traefik.io/v1alpha1
