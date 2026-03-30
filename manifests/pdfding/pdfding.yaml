@@ -34,6 +34,31 @@ spec:
                 secretKeyRef:
                   name: pdfding-secrets
                   key: SECRET_KEY
+      # --- ADD THESE FOR POCKETID OIDC ---
+            - name: OIDC_ENABLE
+              value: "TRUE"
+            - name: OIDC_PROVIDER_NAME
+              value: "pocketid"
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: pdfding-secrets
+                  key: OIDC_CLIENT_ID
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: pdfding-secrets
+                  key: OIDC_CLIENT_SECRET
+            - name: OIDC_AUTHORIZATION_ENDPOINT
+              value: "https://id.smeyer.ca/authorize"
+            - name: OIDC_TOKEN_ENDPOINT
+              value: "https://id.smeyer.ca/api/oidc/token"
+            - name: OIDC_USERINFO_ENDPOINT
+              value: "https://id.smeyer.ca/api/oidc/userinfo"
+            - name: OIDC_JWKS_ENDPOINT
+              value: "https://id.smeyer.ca/api/oidc/jwks"
+            - name: OIDC_END_SESSION_ENDPOINT
+              value: "https://id.smeyer.ca/api/oidc/end-session"
             - name: CSRF_COOKIE_SECURE
               value: "TRUE"
             - name: DEBUG
@@ -63,43 +88,4 @@ spec:
         - name: pdfding-media
           persistentVolumeClaim:
             claimName: pdfding-data-pvc # Match your Longhorn PVC name
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pdfding
-  namespace: pdfding
-spec:
-  ports:
-    - port: 80
-      targetPort: 8000
-  selector:
-    app: pdfding
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pdfding-data-pvc
-  namespace: pdfding
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: longhorn
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pdfding-db-pvc
-  namespace: pdfding
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: longhorn
