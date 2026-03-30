@@ -9,6 +9,9 @@ spec:
   routes:
     - match: Host(`tools.smeyer.ca`)
       kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
       services:
         - name: it-tools
           port: 80
