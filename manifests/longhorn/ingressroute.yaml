@@ -1,0 +1,46 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: longhorn-redirect-https
+  namespace: longhorn-system
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: longhorn-http
+  namespace: longhorn-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`longhorn.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: longhorn-redirect-https
+      services:
+        - name: longhorn-frontend
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`longhorn.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
+      services:
+        - name: longhorn-frontend
+          port: 80
+  tls:
+    secretName: wildcard-smeyer-ca-tls
