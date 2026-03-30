@@ -9,8 +9,11 @@ spec:
   routes:
   - match: Host(`hubble.smeyer.ca`)
     kind: Rule
+    middlewares:
+      - name: pocketid-auth
+        namespace: traefik-forward-auth
     services:
-    - name: hubble-ui
-      port: 80
+      - name: hubble-ui
+        port: 80
   tls:
     secretName: wildcard-smeyer-ca-tls 
