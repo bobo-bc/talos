@@ -10,8 +10,8 @@ spec:
     - match: Host(`drawio.smeyer.ca`)
       kind: Rule
       middlewares:
-    - name: pocketid-auth
-      namespace: traefik-forward-auth
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
       services:
         - name: drawio
           port: 80
