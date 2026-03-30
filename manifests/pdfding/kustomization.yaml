@@ -6,3 +6,4 @@ namespace: pdfding
 resources:
   - pdfding.yaml
   - ingress.yaml
+  - service.yaml
