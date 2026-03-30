@@ -16,7 +16,7 @@ spec:
     # Source 1: Official Pulse Helm chart
     - repoURL: https://rcourtman.github.io/Pulse
       chart: pulse
-      targetRevision: "*"
+      targetRevision: "5.1.25"
       helm:
         valueFiles:
           # Reference to values file in your Git repo (source 2)
