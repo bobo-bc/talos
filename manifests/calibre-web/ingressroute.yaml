@@ -36,9 +36,9 @@ spec:
   routes:
     - match: Host(`books.smeyer.ca`)
       kind: Rule
-      middlewares:
-        - name: pocketid-auth
-          namespace: traefik-forward-auth
+ #     middlewares:
+ #       - name: pocketid-auth
+ #         namespace: traefik-forward-auth
       services:
         - name: calibre-web
           port: 80
