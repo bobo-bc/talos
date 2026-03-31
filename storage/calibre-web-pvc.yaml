@@ -1,0 +1,93 @@
+# =============================================================================
+# Calibre Web Automated - Storage
+# config: Longhorn (app database and settings)
+# library: NFS (your Calibre book library on Proxmox)
+# ingest: NFS (drop folder for new books to auto-import)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Config PVC - Longhorn (app settings, database)
+# -----------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: calibre-web-config-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
+---
+# -----------------------------------------------------------------------------
+# Library PV - NFS (existing books on Proxmox)
+# -----------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: calibre-web-library-pv
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-static
+  nfs:
+    server: 10.0.0.5
+    path: /mnt/data/media/books
+---
+# -----------------------------------------------------------------------------
+# Library PVC - NFS
+# -----------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: calibre-web-library-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-static
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: calibre-web-library-pv
+---
+# -----------------------------------------------------------------------------
+# Ingest PV - NFS (drop folder for new books)
+# Create this folder on Proxmox: mkdir -p /mnt/data/media/books-ingest
+# -----------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: calibre-web-ingest-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-static
+  nfs:
+    server: 10.0.0.5
+    path: /mnt/data/media/books-ingest
+---
+# -----------------------------------------------------------------------------
+# Ingest PVC - NFS
+# -----------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: calibre-web-ingest-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-static
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: calibre-web-ingest-pv
