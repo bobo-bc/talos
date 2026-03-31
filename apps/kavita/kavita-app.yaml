@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kavita
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bobo-bc/talos.git
+    targetRevision: HEAD
+    path: manifests/kavita
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: media
+  ignoreDifferences:             # ADD THIS BLOCK
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
+  syncPolicy:
+    automated:
+      prune: false               # CHANGE from true to false
+      selfHeal: true
+    syncOptions:
+      - RespectIgnoreDifferences=true
