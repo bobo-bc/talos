@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: calibre-web
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bobo-bc/talos.git
+    targetRevision: HEAD
+    path: manifests/calibre-web
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: media
+  ignoreDifferences:
+    - group: ""
+      kind: PersistentVolumeClaim
+      jsonPointers:
+        - /spec
+        - /metadata
+    - group: ""
+      kind: PersistentVolume
+      jsonPointers:
+        - /spec
+        - /metadata
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
