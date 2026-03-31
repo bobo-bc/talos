@@ -1,0 +1,46 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: calibre-web-redirect-https
+  namespace: media
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-web-http
+  namespace: media
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`books.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: calibre-web-redirect-https
+      services:
+        - name: calibre-web
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-web
+  namespace: media
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`books.smeyer.ca`)
+      kind: Rule
+      middlewares:
+        - name: pocketid-auth
+          namespace: traefik-forward-auth
+      services:
+        - name: calibre-web
+          port: 80
+  tls:
+    secretName: wildcard-smeyer-ca-tls
