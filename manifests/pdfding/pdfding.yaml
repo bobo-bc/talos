@@ -50,15 +50,15 @@ spec:
                   name: pdfding-secrets
                   key: OIDC_CLIENT_SECRET
             - name: OIDC_AUTH_URL
-              value: "https://id.smeyer.ca/.well-known/openid-configuration"
+              value: "https://id.smeyer.ca/.well-known/openid-configuration/"
             - name: OIDC_TOKEN_ENDPOINT
-              value: "https://id.smeyer.ca/api/oidc/token"
+              value: "https://id.smeyer.ca/api/oidc/token/"
             - name: OIDC_USERINFO_ENDPOINT
-              value: "https://id.smeyer.ca/api/oidc/userinfo"
+              value: "https://id.smeyer.ca/api/oidc/userinfo/"
             - name: OIDC_JWKS_ENDPOINT
-              value: "https://id.smeyer.ca/api/oidc/jwks"
+              value: "https://id.smeyer.ca/api/oidc/jwks/"
             - name: OIDC_END_SESSION_ENDPOINT
-              value: "https://id.smeyer.ca/api/oidc/end-session"
+              value: "https://id.smeyer.ca/api/oidc/end-session/"
             # App config
             - name: CSRF_COOKIE_SECURE
               value: "TRUE"
@@ -69,7 +69,7 @@ spec:
             - name: SESSION_COOKIE_SECURE
               value: "TRUE"
             - name: CSRF_TRUSTED_ORIGINS
-              value: "https://pdf.smeyer.ca"
+              value: "https://pdf.smeyer.ca/"
             - name: USE_X_FORWARDED_HOST
               value: "True"
             - name: SECURE_PROXY_SSL_HEADER
