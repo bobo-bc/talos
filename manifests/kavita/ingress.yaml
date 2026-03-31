@@ -17,7 +17,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`books.smeyer.ca`)
+    - match: Host(`read.smeyer.ca`)
       kind: Rule
       middlewares:
         - name: pocketid-auth
@@ -37,7 +37,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`books.smeyer.ca`)
+    - match: Host(`read.smeyer.ca`)
       kind: Rule
       middlewares:
         - name: kavita-redirect-https
