@@ -23,7 +23,7 @@ spec:
         fsGroup: 1000  # Ensures NFS volume is writable by uid 1000
       initContainers:
         - name: wait-for-db
-          image: postgres:16-alpine
+          image: postgres:18-alpine
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
