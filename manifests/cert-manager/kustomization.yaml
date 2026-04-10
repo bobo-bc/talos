@@ -8,7 +8,7 @@ helmCharts:
     releaseName: cert-manager
     namespace: cert-manager
     repo: https://charts.jetstack.io
-    version: v1.14.0 # Check for latest
+    version: v1.20.1 # Check for latest
     valuesInline:
       installCRDs: true  # CRITICAL: Talos needs Argo to handle CRDs
       prometheus:
