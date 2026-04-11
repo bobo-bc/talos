@@ -100,8 +100,8 @@ http:
     repo-external:
       loadBalancer:
         servers:
-          - url: "https://10.0.0.241:443"
-        serversTransport: insecureTransport
+          - url: "http://10.0.0.241:3000"
+
         
     homeassist-external:
       loadBalancer:
