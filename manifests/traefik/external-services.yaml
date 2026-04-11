@@ -31,6 +31,11 @@ http:
       entryPoints: ["websecure"]
       service: pbs-external
       tls: {}
+    repo-router:
+      rule: "Host(`repo.smeyer.ca`)"
+      entryPoints: ["websecure"]
+      service: pbs-external
+      tls: {}
 
     homeassist-router:
       rule: "Host(`homeassist.smeyer.ca`)"
@@ -92,6 +97,12 @@ http:
           - url: "https://10.0.0.10:8007"
         serversTransport: insecureTransport
 
+    repo-external:
+      loadBalancer:
+        servers:
+          - url: "https://10.0.0.8:3000"
+        serversTransport: insecureTransport
+        
     homeassist-external:
       loadBalancer:
         servers:
