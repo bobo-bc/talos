@@ -34,7 +34,7 @@ http:
     repo-router:
       rule: "Host(`repo.smeyer.ca`)"
       entryPoints: ["websecure"]
-      service: pbs-external
+      service: repo-external
       tls: {}
 
     homeassist-router:
