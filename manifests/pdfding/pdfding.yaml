@@ -25,7 +25,7 @@ spec:
               mountPath: /home/nonroot/pdfding/media
       containers:
         - name: pdfding
-          image: mrmn/pdfding:v1.7.0
+          image: mrmn/pdfding:v1.7.1
           ports:
             - containerPort: 8000
           env:
